@@ -1,5 +1,6 @@
 import { match } from 'assert';
 import * as React from 'react'
+import { MdDelete } from 'react-icons/md';
 import { getCurrentOver, persistOver, persistInnings, persistMatch } from '../api/matchData';
 import ExtrasComponent from './ExtrasComponent';
 import FairDelivery from './FairDelivery';
@@ -116,7 +117,8 @@ const Scoring=()=>{
     return(
         <>
         
-        <FairDelivery
+        <div className="d-flex justify-content-between">
+            <FairDelivery
             setMultiplier={setMultiplier}
             handleBall={handleBall}
         />
@@ -125,7 +127,11 @@ const Scoring=()=>{
             setExtra={setExtra}
             handleBall={handleBall}
         />
-        <WicketComponent handleBall={handleBall} />
+        </div>
+        <div className="d-flex">
+            <WicketComponent handleBall={handleBall} />
+            <button className='btn btn-danger ms-auto px-5 fs-4 border rounded-5'><MdDelete/></button>
+        </div>
         </>
     )
 }

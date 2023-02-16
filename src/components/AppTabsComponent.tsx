@@ -46,7 +46,7 @@ const AppTabsComponent = () => {
         setInnings(inningData);
     };
     return (
-        <div className="container">
+        <div className="bg-white container my-4 p-3 border border-0 rounded-3">
             <Tabs
                 defaultActiveKey="live"
                 id="justify-tab-example"

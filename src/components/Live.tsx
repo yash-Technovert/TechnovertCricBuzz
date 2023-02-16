@@ -2,8 +2,13 @@ import * as React from 'react'
 import Batsman from './Batsman'
 import Bowler from './bowler'
 import CurrentOver from './CurrentOver'
+import { Supabase } from '../api/supabase'
 
 const Live = () => {
+    const base= new Supabase()
+    React.useEffect(() => {
+        base.getInningData()
+    },[])
     return(
        <>
         <div className="scores d-flex justify-content-between py-2">
