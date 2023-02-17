@@ -9,6 +9,7 @@ import Login from './components/Login/Login';
 import ProtectedRoute from './components/ProtectedRoutes';
 import SignUp from './components/SignUp/SignUp';
 import { AuthProvider } from './contexts/AuthProvider';
+import MatchSettings from './components/MatchSettings';
 
 function App() {
   return (
@@ -18,7 +19,14 @@ function App() {
                     <Route path='/' element={<Login />} />
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/login" element={<Login />} />
-
+                    <Route
+                        path="/matchsettings"
+                        element={
+                            // <ProtectedRoute>
+                                <MatchSettings />
+                            // </ProtectedRoute>
+                        }
+                    />
                     <Route
                         path="/app"
                         element={

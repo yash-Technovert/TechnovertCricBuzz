@@ -1,0 +1,28 @@
+.backButton
+{
+    width: 3.5cm;
+    height:1.2cm;
+}
+.backButton:hover
+{
+    background-color: white;
+    color: black;
+    border-color: black;
+}
+.proceedButton:hover
+{
+    border-color: white;
+}
+.dropdownList
+{
+    background-color: rgba(222, 214, 238, 0.908);
+    width:50%;
+    height: 2rem;
+    font-weight:600;
+}
+.playerInput
+{
+    width: 50%;
+    height: 2rem;
+    font-weight:bold;
+}
