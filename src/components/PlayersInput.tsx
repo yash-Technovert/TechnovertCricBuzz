@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import '../assets/styles/matchSettings.css'
 type propsType = {
   teamPlayers: string[];
