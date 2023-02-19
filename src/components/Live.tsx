@@ -4,9 +4,12 @@ import Bowler from './bowler'
 import CurrentOver from './CurrentOver'
 import { Supabase } from '../api/supabase'
 import { InningStatResponse } from '../models/Innings'
+import { useEffect } from 'react'
+import { getScores } from '../api/match'
 
 const Live = () => {
     let id='INDIAvAUSTRALIA:2/17/2023:I1'
+    let matchId='INDIAvAUSTRALIA:2/17/2023'
     var data:InningStatResponse = {
         id: '',
         matchId: '',
@@ -44,7 +47,15 @@ const Live = () => {
             setData()
         }
         )
-        .subscribe()
+        .subscribe();
+
+        useEffect(() => {
+            getScores(id,matchId).then((res:any)=>{
+                console.log(res)
+                setInningData(res.data)
+                setCrr(res.data.runsScored/res.data.oversPlayed)
+            })
+        },[])
     return(
        <>
         <div className="scores d-flex justify-content-between py-2">

@@ -12,3 +12,26 @@ export async function getMatchInfo(id:string){
         }
     })
 }
+
+export async function getScores(id:string,matchId:string){
+    return await axios({
+        method: 'get',
+        url: baseUrl+'getscore',
+        params:{
+            id:id,
+            matchId:matchId
+        }
+    })
+}
+
+export async function updateScore(id:string,updates:any)
+{
+    return await axios({
+        method: 'put',
+        url: baseUrl+'updatescore',
+        params:{
+            inningId:id
+        },
+        data:{updates}
+    })
+}
