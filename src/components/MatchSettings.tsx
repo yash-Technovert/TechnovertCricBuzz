@@ -91,6 +91,9 @@ const MatchSettings = () => {
     changeStartDisable(true);
     changeDisplaySelectionPanel(false);
   };
+  const iconDisplay=(teamName:string)=>{
+    return true
+  }
   const teamTwoPlaying11 = (list: string[]) => {
     handleSelectedTeamOne(list);
   };
@@ -301,7 +304,7 @@ const MatchSettings = () => {
                 style={{ backgroundColor: "white" }}
               >
                 <h3 className="d-flex fw-bold align-items-center justify-content-center text-capitalize mt-1">
-                  {firstTeamTitle}{(1>2)?<GiCricketBat className="text-warning fs-2"></GiCricketBat>:<GiTennisBall className="text-success fs-2 ms-2"></GiTennisBall>}
+                  {firstTeamTitle}{(iconDisplay(firstTeamTitle))?<GiCricketBat className="text-warning fs-2 ms-2"></GiCricketBat>:<GiTennisBall className="text-success fs-2 ms-2"></GiTennisBall>}
                 </h3>
                 <hr className="mt-0"></hr>
                 <PlayersInput
