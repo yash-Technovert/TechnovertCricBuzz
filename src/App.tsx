@@ -9,12 +9,14 @@ import Login from './components/Login/Login';
 import ProtectedRoute from './components/ProtectedRoutes';
 import SignUp from './components/SignUp/SignUp';
 import { AuthProvider } from './contexts/AuthProvider';
+import { MatchProvider } from './contexts/MatchContext';
 
 function App() {
   return (
         <>
             <AuthProvider>
-                <Routes>
+                <MatchProvider>
+                    <Routes>
                     <Route path='/' element={<Login />} />
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/login" element={<Login />} />
@@ -27,7 +29,8 @@ function App() {
                             </ProtectedRoute>
                         }
                     />
-                </Routes>
+                    </Routes>
+                </MatchProvider>
             </AuthProvider>
         </>
     );

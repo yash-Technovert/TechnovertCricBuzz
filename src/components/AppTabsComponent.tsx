@@ -54,14 +54,7 @@ const AppTabsComponent = () => {
                 justify
             >
                 <Tab eventKey="match-center" title="Match Center">
-                    <MatchComponent
-                        team1={team1}
-                        team2={team2}
-                        setTeam1={setTeam1}
-                        setTeam2={setTeam2}
-                        handleEndInnings={handleEndInnings}
-                        handleEndMatch={handleEndMatch}
-                    />
+                    <MatchComponent/>
                 </Tab>
                 <Tab eventKey="live" title="Live">
                     <Live />
