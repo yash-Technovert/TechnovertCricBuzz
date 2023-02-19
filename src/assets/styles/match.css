@@ -1,0 +1,7 @@
+.batsman *, .bowler *{
+  border: none !important;
+}
+.ball{
+  border-radius: 50% !important;
+}
+
