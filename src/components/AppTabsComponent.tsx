@@ -6,6 +6,7 @@ import MatchComponent from './MatchComponent';
 import ScoringTabComponent from './ScoringTabComponent';
 import Live from './Live';
 import { Tabs, Tab } from 'react-bootstrap';
+import MatchSettings from './MatchSettings';
 
 const AppTabsComponent = () => {
     const { onLogout } = useAuth();
@@ -46,7 +47,7 @@ const AppTabsComponent = () => {
         setInnings(inningData);
     };
     return (
-        <div className="container">
+        <div className="bg-white container my-4 p-3 border border-0 rounded-3">
             <Tabs
                 defaultActiveKey="live"
                 id="justify-tab-example"

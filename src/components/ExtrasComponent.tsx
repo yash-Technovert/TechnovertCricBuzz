@@ -15,7 +15,7 @@ const ExtrasComponent = ({ extra, setExtra, handleBall }) => {
     <div className="extra">
       <div className="d-flex extra-types">
          {extras.map((extra) => {
-          return(<button className="btn btn-primary btn-sm m-1 px-3" onClick={() => {handleBall(extra);}}>{extra}</button>)
+          return(<button className="btn btn-primary btn-sm m-1 py-3 px-5 fw-bold fs-6" onClick={() => {handleBall(extra);}}>{extra}</button>)
         })}
       </div>
     </div>

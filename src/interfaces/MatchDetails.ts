@@ -1,6 +1,6 @@
 import { Team } from "./Match";
 
-export default interface MatchDetails {
+export interface MatchDetails {
     id: number;
     matchNo: number;
     date: Date;

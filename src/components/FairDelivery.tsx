@@ -11,7 +11,7 @@ const FairDelivery = ({ setMultiplier, handleBall }) => {
     <div className="mb-2">
       <div className="d-flex">
         {fairDelivery.map((delivery) => {
-          return(<button className="btn btn-primary btn-sm m-1 px-3" onClick={() => {handleBall(delivery);}}>{delivery}</button>)
+          return(<button className="btn btn-primary btn-sm m-1 p-3 px-5 fw-bold fs-6" onClick={() => {handleBall(delivery);}}>{delivery}</button>)
         })}
       </div>
     </div>
