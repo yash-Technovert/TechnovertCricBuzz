@@ -4,11 +4,6 @@
 .ball{
   border-radius: 50% !important;
 }
-.backButton
-{
-   width: 3.5cm;
-   height: fit-content;
-}
 .backButton:hover,.startMatch:hover
 {
     background-color: white;
@@ -21,22 +16,16 @@
 }
 .dropdownList
 {
-    background-color: rgba(222, 214, 238, 0.908);
+    background-color:rgb(161, 161, 250);
     width:50%;
     height: 2rem;
     font-weight:600;
 }
 .playerInput
 {
-    width: 50%;
-    height: 2rem;
     font-weight:bold;
 }
-.addTeamPanel
-{
-    background-color: whitesmoke;
-}
-#male,#female
+#teamOneTitle,#teamTwoTitle
 {
   display: grid;
   grid-template-columns: 1em auto;
