@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
-import "../assets/styles/matchSettings.css";
+import "../assets/styles/match.css";
 import PlayersInput from "./PlayersInput";
-import { GiTennisBall,GiCricketBat } from "react-icons/gi"
-import {BiCoin} from "react-icons/bi"
-import {AiFillSetting} from "react-icons/ai"
+import { GiTennisBall, GiCricketBat } from "react-icons/gi"
+import { BiCoin } from "react-icons/bi"
+import { AiFillSetting } from "react-icons/ai"
+import { BsArrowRightCircleFill } from 'react-icons/bs'
+import { FaPlus } from 'react-icons/fa'
+
 const MatchSettings = () => {
   const [firstTeamTitle, changeFirstTeamTitle] = useState<string>("");
   const [secondTeamTitle, changeSecondTeamTitle] = useState<string>("");
@@ -16,6 +19,7 @@ const MatchSettings = () => {
   const [startButtonDisable, changeStartDisable] = useState<boolean>(true);
   const [addTeamPannel, hideAddTeamPannel] = useState<boolean>(true);
   const [addButtonDisabled, changeDisabled] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(false)
 
   const [teamList] = useState<string[]>([
     "Chennai super kings",
@@ -59,15 +63,6 @@ const MatchSettings = () => {
   const [selectedTeamTwo, handleSelectedTeamTwo] = useState<string[]>([]);
 
   useEffect(() => {
-    if (firstTeamTitle === secondTeamTitle||optedOption==='') {
-      changeProceedDisable(true);
-      return;
-    }
-    if (firstTeamTitle !== "" && secondTeamTitle !== ""&&optedOption!=='')
-      changeProceedDisable(false);
-  }, [firstTeamTitle, secondTeamTitle,optedOption]);
-
-  useEffect(() => {
     if (
       !selectedTeamOne.includes("") &&
       !selectedTeamTwo.includes("") &&
@@ -77,6 +72,8 @@ const MatchSettings = () => {
       changeStartDisable(false);
   }, [selectedTeamOne, selectedTeamTwo]);
 
+  useEffect(() => { if (newTeam === '') { changeDisabled(true) } else changeDisabled(false) }, [newTeam])
+
   const handleProceed = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     changeDisplaySelectionPanel(true);
@@ -84,46 +81,44 @@ const MatchSettings = () => {
 
   const handleStartMatch = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    //console.log(selectedTeamOne,selectedTeamTwo);
+    //once all players are selected of both teams ,to be directed to match center from here
   };
 
   const handleBackButton = () => {
     changeStartDisable(true);
     changeDisplaySelectionPanel(false);
+    changeProceedDisable(true)
   };
-  const iconDisplay=(teamName:string)=>{
-    return true
-  }
   const teamTwoPlaying11 = (list: string[]) => {
     handleSelectedTeamOne(list);
   };
   const teamOnePlaying11 = (list: string[]) => {
     handleSelectedTeamTwo(list);
   };
-  const handleAddTeam = () => {
-    hideAddTeamPannel(false);
-  };
   const handleAddButton = (e: React.SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    hideAddTeamPannel(true);
-    changeDisplaySelectionPanel(false);
-    //after adding new team to backend need to set newTeam=''
-    //setNewTeam('')
-  };
-  const handleTeamNameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTeam(e.target.value);
-  };
+    if (newTeam === 'asd') {
+      setErrorMessage(true)
+      e.preventDefault()
+    }
+    else {
 
-  const handleChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
-    setTossWinner(e.target.value);
+    }
   };
 
   return (
     <>
       {!addTeamPannel && (
-        <div className="container mt-4 ">
+        <div className="container mt-5 ">
           <div className="row justify-content-center mt-3 p-4">
-            <div className="col-7 addTeamPanel border border-dark rounded">
+            <div className="col-10 d-flex align-items-center justify-content-end p-0">
+              <button
+                className="btn btn-secondary  border border-light fs-3  fw-bold ps-3 "
+                onClick={() => { hideAddTeamPannel(true); setNewTeam(''); setErrorMessage(false); changeProceedDisable(true) }}
+              >
+                Back<BsArrowRightCircleFill className="p-1 fs-2 ms-2 pt-0"></BsArrowRightCircleFill>
+              </button>
+            </div>
+            <div className="col-10 bg-light border border-dark rounded mt-3">
               <form onSubmit={handleAddButton}>
                 <div className="mb-3 p-4">
                   <h3>Team Name</h3>
@@ -132,8 +127,9 @@ const MatchSettings = () => {
                     className="form-control "
                     placeholder="Enter Team Name Here!!"
                     value={newTeam}
-                    onChange={handleTeamNameInput}
+                    onChange={(e) => { setNewTeam(e.target.value) }}
                   />
+                  {errorMessage && <p className="text-danger ms-1">Team name entered cannot be added!!</p>}
                 </div>
                 <div className="d-flex align-items-center justify-content-center pb-3">
                   <button
@@ -154,9 +150,9 @@ const MatchSettings = () => {
           <div className="d-flex align-items-center justify-content-end">
             <button
               className="btn btn-primary  border border-light fs-3  fw-bold"
-              onClick={handleAddTeam}
+              onClick={() => { hideAddTeamPannel(false) }}
             >
-              Add Team +
+              Team <FaPlus className="fs-5"></FaPlus>
             </button>
           </div>
           <div className=" mt-4">
@@ -174,16 +170,16 @@ const MatchSettings = () => {
                   onChange={(e) => {
                     changeFirstTeamTitle(e.target.value);
                     setTossWinner("")
+                    changeProceedDisable(true)
                     // invoke changeTeamOneplayers from here
-                    //console.log("team players changed");
                   }}
                 >
                   <option value="" disabled>
                     Select Team 1
                   </option>
                   {teamList.map((team) => {
-                    if(team!==secondTeamTitle){
-                      return ( <option value={team} key={team}>
+                    if (team !== secondTeamTitle) {
+                      return (<option value={team} key={team}>
                         {team}
                       </option>)
                     }
@@ -201,16 +197,16 @@ const MatchSettings = () => {
                   onChange={(e) => {
                     changeSecondTeamTitle(e.target.value);
                     setTossWinner("")
+                    changeProceedDisable(true)
                     // invoke changeTeamOneplayers from here
-                    //console.log("team players changed");
                   }}
                 >
                   <option value="" disabled>
                     Select Team 2
                   </option>
                   {teamList.map((team) => {
-                    if(team!==firstTeamTitle){
-                      return ( <option value={team} key={team}>
+                    if (team !== firstTeamTitle) {
+                      return (<option value={team} key={team}>
                         {team}
                       </option>)
                     }
@@ -225,8 +221,8 @@ const MatchSettings = () => {
                   <input
                     type="radio"
                     value={firstTeamTitle}
-                    id="male"
-                    onChange={handleChange}
+                    id="teamOneTitle"
+                    onChange={(e) => { setTossWinner(e.target.value) }}
                     name="tossWinner"
                   />
                   <h4 className="ms-1">{(firstTeamTitle.length === 0) ? 'Team 1' : firstTeamTitle}</h4>
@@ -235,8 +231,8 @@ const MatchSettings = () => {
                   <input
                     type="radio"
                     value={secondTeamTitle}
-                    id="female"
-                    onChange={handleChange}
+                    id="teamTwoTitle"
+                    onChange={(e) => { setTossWinner(e.target.value) }}
                     name="tossWinner"
                   />
                   <h4 className="ms-1">{(secondTeamTitle.length === 0) ? 'Team 2' : secondTeamTitle}</h4>
@@ -249,8 +245,8 @@ const MatchSettings = () => {
                     <input
                       type="radio"
                       value='Batting'
-                      id="male"
-                      onChange={(e => setOptedOption(e.target.value))}
+                      id="teamOneTitle"
+                      onChange={(e => { setOptedOption(e.target.value); changeProceedDisable(false) })}
                       name="optedOption"
                     />
                     <h4 className="ms-1"><GiCricketBat className="text-warning fs-1"></GiCricketBat></h4>
@@ -259,15 +255,15 @@ const MatchSettings = () => {
                     <input
                       type="radio"
                       value='Bowling'
-                      id="female"
-                      onChange={(e => setOptedOption(e.target.value))}
+                      id="teamTwoTitle"
+                      onChange={(e => { setOptedOption(e.target.value); changeProceedDisable(false) })}
                       name="optedOption"
                     />
                     <h4 className="ms-1"><GiTennisBall className="text-success fs-1"></GiTennisBall></h4>
                   </div>
                 </div>
                 <div className="float-end ">
-                  <button type="button" className="btn btn-danger fw-bold border border-light fs-5 " onClick={()=>{setTossWinner('');setOptedOption('')}}>Change Toss Winner</button>
+                  <button type="button" className="btn btn-danger fw-bold border border-light fs-5 " onClick={() => { setTossWinner(''); setOptedOption(''); changeProceedDisable(true) }}>Change Toss Winner</button>
                 </div>
               </div>}
             </div>
@@ -285,13 +281,13 @@ const MatchSettings = () => {
       )}
       {displaySelectionPanel && (
         <div className="container">
-          <div className="row justify-content-around mt-2 mb-2">
+          <div className="row d-flex justify-content-around mt-2 mb-2">
             <p className="fs-3 text-capitalize text-white fw-bolder col-6 me-5 p-0">
               Team Players selection
             </p>
             <button
               type="submit"
-              className="btn btn-dark backButton fs-5 fw-bold border border-light border-2 col-6 ms-5 mt-2 "
+              className="btn btn-dark fs-5 fw-bold border border-light border-2 col-1 ms-5 mt-2 "
               onClick={handleBackButton}
             >
               Back
@@ -303,9 +299,9 @@ const MatchSettings = () => {
                 className="col-4  border border-dark rounded ps-4 pe-4 pt-1 pb-1"
                 style={{ backgroundColor: "white" }}
               >
-                <h3 className="d-flex fw-bold align-items-center justify-content-center text-capitalize mt-1">
-                  {firstTeamTitle}{(iconDisplay(firstTeamTitle))?<GiCricketBat className="text-warning fs-2 ms-2"></GiCricketBat>:<GiTennisBall className="text-success fs-2 ms-2"></GiTennisBall>}
-                </h3>
+                <h4 className="d-flex fw-bold align-items-center justify-content-center text-capitalize m-1">
+                  {(firstTeamTitle === tossWinner) ? <p className="bg-warning fs-4 mt-0 mb-0 me-3 ps-2 pe-2 rounded-circle text-light">T</p> : <></>}{firstTeamTitle}{(firstTeamTitle === tossWinner) ? (optedOption === 'Batting') ? <GiCricketBat className="text-warning fs-2 ms-2"></GiCricketBat> : <GiTennisBall className="text-success fs-2 ms-2"></GiTennisBall> : <></>}
+                </h4>
                 <hr className="mt-0"></hr>
                 <PlayersInput
                   playing11={teamOnePlaying11}
@@ -316,9 +312,9 @@ const MatchSettings = () => {
                 className="col-4  border border-dark rounded ps-4 pe-4 pt-1 pb-1"
                 style={{ backgroundColor: "white" }}
               >
-                <h3 className="d-flex fw-bold align-items-center justify-content-center text-capitalize mt-1">
-                  {secondTeamTitle}
-                </h3>
+                <h4 className="d-flex fw-bold align-items-center justify-content-center text-capitalize  m-1">
+                  {(secondTeamTitle === tossWinner) ? <p className="bg-warning fs-4 mt-0 mb-0 me-3 ps-2 pe-2 rounded-circle text-light">T</p> : <></>}{secondTeamTitle}{(secondTeamTitle === tossWinner) ? (optedOption === 'Batting') ? <GiCricketBat className="text-warning fs-2 ms-2"></GiCricketBat> : <GiTennisBall className="text-success fs-2 ms-2"></GiTennisBall> : <></>}
+                </h4>
                 <hr className="mt-0"></hr>
                 <PlayersInput
                   playing11={teamTwoPlaying11}

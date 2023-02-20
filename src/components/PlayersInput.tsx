@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import '../assets/styles/matchSettings.css'
+import '../assets/styles/match.css'
 type propsType = {
   teamPlayers: string[];
   playing11: (arg: string[]) => void
@@ -29,7 +29,6 @@ const PlayersInput = ({ teamPlayers, playing11 }: propsType) => {
     player10,
     player11
   ];
-
   useEffect(() => { playing11(list) }, [player1, player2, player3, player4, player5, player6, player7, player8, player9, player10, player11])
 
   const handleOption = (x: string) => {
@@ -37,6 +36,8 @@ const PlayersInput = ({ teamPlayers, playing11 }: propsType) => {
     else return <option>Change Player</option>
   }
   const optionList = teamPlayers.filter((player) => !list.includes(player));
+
+  
 
   return (
     < div className="d-flex justify-content-center flex-column">
@@ -66,7 +67,7 @@ const PlayersInput = ({ teamPlayers, playing11 }: propsType) => {
           </select>
         }
       </div>
-      <div className="d-inline-flex mb-2">
+      <div className="d-inline-flex mb-3">
         <input
           placeholder="Player 2"
           value={player2}
