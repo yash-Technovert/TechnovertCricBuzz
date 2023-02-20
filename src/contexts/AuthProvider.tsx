@@ -14,7 +14,7 @@ const AuthContext = createContext<IAuthProvider | null>(null);
 const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(null);
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         const loggedInUser = localStorage.getItem("sb-jnyomjupkafvnwilgjws-auth-token");
         if (loggedInUser) {
@@ -22,11 +22,11 @@ const AuthProvider = ({ children }) => {
             setToken(foundUser);
         }
     }, []);
-    
-    const handleLogin =  (data:any) => {
+
+    const handleLogin = (data: any) => {
         //   const token = await fakeAuth();
         setToken(data);
-        navigate('/app');
+        navigate('/matchsettings');
     };
 
     const handleLogout = () => {
@@ -40,7 +40,7 @@ const AuthProvider = ({ children }) => {
             setToken(foundUser);
         }
         return token
-    };   
+    };
 
     const value: IAuthProvider = {
         token,
@@ -53,7 +53,7 @@ const AuthProvider = ({ children }) => {
 };
 
 const useAuth = () => {
-  return useContext(AuthContext) as IAuthProvider;
+    return useContext(AuthContext) as IAuthProvider;
 };
 
 export { AuthProvider, AuthContext, useAuth };

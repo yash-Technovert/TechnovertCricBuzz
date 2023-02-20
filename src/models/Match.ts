@@ -6,3 +6,11 @@ export class Match{
     tossDecision!: string
     matchWinner!: string
 }
+
+export class CreateMatch
+{
+    teamOne!: string
+    teamTwo!: string
+    tossWinner!: string
+    tossDecision!: string
+}

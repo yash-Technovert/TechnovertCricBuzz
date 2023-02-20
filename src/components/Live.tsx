@@ -35,19 +35,17 @@ const Live = () => {
         .channel('table-db-changes').
         on('postgres_changes',
         {
-        event: 'UPDATE',
-        schema: 'public',
-        table: 'InningStat',
-        filter: 'id=eq.INDIAvAUSTRALIA:2/17/2023:I1',
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'InningStat',
+            filter: 'id=eq.INDIAvAUSTRALIA:2/17/2023:I1',
+            // `id=eq.${inningId}'
         },
          (payload:any) => {
             data = payload.new
-            console.log(payload)
             let setData=()=>{setInningData(data); setCrr(data.runsScored/data.oversPlayed);}
             setData()
-        }
-        )
-        .subscribe();
+        }).subscribe();
 
         useEffect(() => {
             getScores(id,matchId).then((res:any)=>{

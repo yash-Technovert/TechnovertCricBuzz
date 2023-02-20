@@ -37,6 +37,7 @@ export default function Login() {
             else{
                 onLogin(res.data);
             }
+            console.log(res.data);
         })
     });
 
