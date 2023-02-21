@@ -1,48 +1,47 @@
-import React, {createContext} from 'react';
+import React, { createContext, useReducer } from 'react';
+import MatchReducer, { initialState } from './MatchReducer';
+import { getScores } from '../api/match';
 import { InningStatResponse } from '../models/Innings';
 
-export const MatchContext = createContext<InningStatResponse>(
-    {
-        id:'',
-        matchId:'',
-        isFirstInning:true,
-        runsScored:0,
-        wickets:0,
-        oversPlayed:0,
-        extras:{
-            wide:0,
-            noBall:0,
-            bye:0,
-            legBye:0,
-        },
-        four:0,
-        six:0,
-        teamName:'',
+export const MatchContext = createContext(initialState)
+
+export const MatchProvider = (props: any) => {
+    const [state, dispatch] = useReducer(MatchReducer, initialState)
+
+    const getScore= async (id:string,matchId:string) => {
+        const response = await getScores(id,matchId)
+        .then((res) =>{
+            console.log(res.data)
+            setInningStat(res.data)
+        })
     }
-)
 
 
-export const MatchProvider = (props:any)  => { 
-    const temp:InningStatResponse = {
-        id:'',
-        matchId:'',
-        isFirstInning:true,
-        runsScored:0,
-        wickets:0,
-        oversPlayed:0,
-        extras:{
-            wide:0,
-            noBall:0,
-            bye:0,
-            legBye:0,
-        },
-        four:0,
-        six:0,
-        teamName:'',
+    const setMatch = (match:any) => {
+        dispatch({
+            type: 'SET_MATCH',
+            payload: match
+        })
     }
-    return(
-        <MatchContext.Provider  value={temp}>
+
+    const setInningStat = (inningStat:any) => {
+        dispatch({
+            type: 'SET_INNING_STAT',
+            payload: inningStat
+        })
+    }
+
+    return (
+        <MatchContext.Provider value={{
+            Match: state.Match,
+            inningStat: state.inningStat,
+            // setMatch,
+            // setInningStat,
+        }}>
             {props.children}
         </MatchContext.Provider>
     )
 }
+
+
+

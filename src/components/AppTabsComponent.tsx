@@ -6,6 +6,7 @@ import MatchComponent from './MatchComponent';
 import ScoringTabComponent from './ScoringTabComponent';
 import Live from './Live';
 import { Tabs, Tab } from 'react-bootstrap';
+import MatchSettings from './MatchSettings';
 
 const AppTabsComponent = () => {
     const { onLogout } = useAuth();
