@@ -4,7 +4,7 @@ import { Form, Table } from 'react-bootstrap';
 import './../assets/styles/match.css'
 
 // @ts-ignore
-const Bowler = () => {
+const Bowler = (props) => {
   return (
     <>
         <div className="bowler">
@@ -22,12 +22,16 @@ const Bowler = () => {
             <tbody >
                 <tr>
                     <td className='ps-3 pe-5 py-3 col-6'>
-                        <Form.Select aria-label="Default select example" className='me-4'>
-                            <option>Bowler</option>
-                            <option value="1">Bowler</option>
-                            <option value="2">Bowler</option>
-                            <option value="3">Bowler</option>
-                        </Form.Select>
+                        {props.isAdmin ?
+                            <Form.Select aria-label="Default select example">
+                                <option>Bowler</option>
+                                <option value="1">Bowler</option>
+                                <option value="2">Bowler</option>
+                                <option value="3">Bowler</option>
+                            </Form.Select>
+                            :
+                            <p className='mt-2 mb-0'>Bowler</p>
+                        }
                     </td>
                     <td><p className='mt-3'>0.5</p></td>
                     <td><p className='mt-3'>0</p></td>

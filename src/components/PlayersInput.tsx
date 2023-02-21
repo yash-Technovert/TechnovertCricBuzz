@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getPlayers } from "../api/match";
 import '../assets/styles/match.css'
 import { Player } from "../models/Player";
-import { MultiSelect } from 'primereact/multiselect';
 import { Dropdown } from "react-bootstrap";
-import './../assets/styles/match.css'
 type PropsType = {
   teamId: string,
   setTeamPlayers: any
@@ -16,12 +14,12 @@ interface SelectedPlayer {
 const PlayersInput = ({ teamId, setTeamPlayers }: PropsType) => {
 
   const [list, setList] = useState<Player[]>([]);
-  const [selectedPlayers, setSelectedPlayers] = useState<SelectedPlayer[]>([]);
+  const [selectedPlayers, setSelectedPlayers] = useState<any[]>([]);
   const [removeId, setRemoveId] = useState<string>('');
 
 
   const handleChange = (e: any) => {
-    const { name, value, checked } = e.target;
+    const { value, checked } = e.target;
     let player = list.find((player) => player.id === value)
     let playerObj: SelectedPlayer = {
       id: player?.id || '',
@@ -34,12 +32,12 @@ const PlayersInput = ({ teamId, setTeamPlayers }: PropsType) => {
     }
   }
 
-  const handleRemove = () => {
-    setSelectedPlayers(selectedPlayers.filter((player) => player.id !== removeId))
-    setRemoveId('')
-    let checkBox = document.getElementById(removeId) as HTMLInputElement
-    checkBox.checked = false
-  }
+  const handleRemove = useCallback(() => {
+      setSelectedPlayers(selectedPlayers.filter((player) => player.id !== removeId))
+      setRemoveId('')
+      let checkBox = document.getElementById(removeId) as HTMLInputElement
+      checkBox.checked = false
+    }, [removeId, selectedPlayers])
 
   useEffect(() => {
     getPlayers(teamId)
@@ -52,13 +50,14 @@ const PlayersInput = ({ teamId, setTeamPlayers }: PropsType) => {
     if (removeId) {
       handleRemove()
     }
-  }, [removeId])
+  }, [removeId, handleRemove])
 
   useEffect(() => {
     if (selectedPlayers.length === 11) {
+      console.log('length of selected players is 11')
       setTeamPlayers(selectedPlayers)
     }
-  }, [selectedPlayers])
+  }, [selectedPlayers, setTeamPlayers])
   return (
     <>
       <div className="d-flex justify-content-center">
@@ -72,7 +71,7 @@ const PlayersInput = ({ teamId, setTeamPlayers }: PropsType) => {
               {list.map((player, index) => {
                 return (
                   <div className="d-flex p-2" key={index}>
-                    <input type="checkbox" name="player" id={player.id} value={player.id} onChange={handleChange} className='.select-player px-2 py-1 fs-4' />
+                    <input type="checkbox" name="player" id={player.id} value={player.id} onChange={handleChange} className='select-player px-2 py-1 fs-4' />
                     <label htmlFor="player" className="fs-5 fw-bold px-2 py-1">{player.name}</label>
                   </div>
                 )

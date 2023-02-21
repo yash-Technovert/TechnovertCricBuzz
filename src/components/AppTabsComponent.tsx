@@ -1,12 +1,10 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { getCurrentInnings, getCurrentMatch, persistInnings, persistMatch } from '../api/matchData';
 import { useAuth } from '../contexts/AuthProvider';
 import MatchComponent from './MatchComponent';
 import ScoringTabComponent from './ScoringTabComponent';
 import Live from './Live';
 import { Tabs, Tab } from 'react-bootstrap';
-import MatchSettings from './MatchSettings';
 
 const AppTabsComponent = () => {
     const { onLogout } = useAuth();
@@ -58,10 +56,10 @@ const AppTabsComponent = () => {
                     <MatchComponent/>
                 </Tab>
                 <Tab eventKey="live" title="Live">
-                    <Live />
+                    <Live isAdmin={false} />
                 </Tab>
                 <Tab eventKey="scoring" title="Scoring">
-                    <ScoringTabComponent match={match} setMatch={setMatch} innings={innings} setInnings={setInnings} />
+                    <ScoringTabComponent/>
                 </Tab>
             </Tabs>
         </div>

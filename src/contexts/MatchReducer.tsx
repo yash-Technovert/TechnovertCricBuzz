@@ -3,7 +3,10 @@ import { useReducer } from "react";
 export const initialState = {
     matchInfo: {},
     firstInning: {},
-    secondInning: {}
+    secondInning: {},
+    teamOne: {},
+    teamTwo: {},
+    currentOver: []
 }
 
 
@@ -17,6 +20,15 @@ const MatchReducer = (state: any, action: any) => {
             return state;
         case "SET_SECONDINNING":
             state.secondInning = action.payload.secondInning;
+            return state;
+        case "SET_TEAMONE":
+            state.teamOne = action.payload.teamOne;
+            return state;
+        case "SET_TEAMTWO":
+            state.teamTwo = action.payload.teamTwo;
+            return state;
+        case "UPDATE_CURRENT_OVER":
+            state.currentOver = action.payload.currentOver;
             return state;
         default:
             return state

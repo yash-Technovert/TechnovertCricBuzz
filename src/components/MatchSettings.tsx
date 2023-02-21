@@ -68,22 +68,24 @@ const MatchSettings = () => {
   const [errorMessage, setErrorMessage] = useState(false)
 
   const [teamList, setTeamList] = useState<Team[]>([]);
-  const [teamOnePlaying11, setTeamOnePlaying11] = useState<any[]>([]);
-  const [teamTwoPlaying11, setTeamTwoPlaying11] = useState<any[]>([]);
+  const [teamOnePlaying11, setTeamOnePlaying11] = useState<any>([]);
+  const [teamTwoPlaying11, setTeamTwoPlaying11] = useState<any>([]);
   const [matchDetails, setMatchDetails] = useState<any>({})
 
   useEffect(() => {
     if (teamOnePlaying11.length === 11 && firstTeamTitle && teamTwoPlaying11.length === 11 && secondTeamTitle) {
       changeStartDisable(false)
     }
-  }, [teamOnePlaying11, teamTwoPlaying11]);
+  }, [teamOnePlaying11, teamTwoPlaying11, firstTeamTitle, secondTeamTitle]);
 
   const setTeamOnePlayers = (players: any) => {
-    setTeamOnePlaying11(players)
-  }
+    let arr: any[] = [...players]
+    setTeamOnePlaying11(arr)
 
+  }
   const setTeamTwoPlayers = (players: any) => {
-    setTeamTwoPlaying11(players)
+    let arr: any[] = [...players]
+    setTeamTwoPlaying11(arr)
   }
 
   useEffect(() => { if (newTeam === '') { changeDisabled(true) } else changeDisabled(false) }, [newTeam])
@@ -97,6 +99,7 @@ const MatchSettings = () => {
 
   const startMatch = (e: any) => {
     e.preventDefault();
+    console.log(matchDetails)
     createMatch(matchDetails)
       .then((res: any) => {
         if (res.status === 200 && res.data) {
@@ -134,12 +137,10 @@ const MatchSettings = () => {
 
 
   useEffect(() => {
-    console.log('in useEffect')
     if (teamOnePlaying11.length === 11 && teamTwoPlaying11.length === 11) {
       setMatchDetails({ ...matchDetails, teamOnePlayers: teamOnePlaying11, teamTwoPlayers: teamTwoPlaying11, teamOne: firstTeamTitle, teamTwo: secondTeamTitle, tossWinner: tossWinner, tossDecision: optedOption })
-      console.log('in if')
     }
-  }, [teamOnePlaying11, teamTwoPlaying11])
+  }, [teamOnePlaying11, teamTwoPlaying11, firstTeamTitle, secondTeamTitle, tossWinner, optedOption, matchDetails])
 
   useEffect(() => {
     getTeams()
@@ -224,6 +225,7 @@ const MatchSettings = () => {
                         {team.teamName}
                       </option>)
                     }
+                    return null;
                   })}
                 </Form.Select>
               </div>
@@ -249,6 +251,7 @@ const MatchSettings = () => {
                         {team.teamName}
                       </option>)
                     }
+                    return null;
                   })}
                 </Form.Select>
               </div>
