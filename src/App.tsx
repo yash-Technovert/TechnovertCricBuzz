@@ -17,18 +17,10 @@ function App() {
             <AuthProvider>
                 <MatchProvider>
                     <Routes>
-                    <Route path='/' element={<Login />} />
-                    <Route path="/signup" element={<SignUp />} />
-                    <Route path="/login" element={<Login />} />
-
-                    <Route
-                        path="/app"
-                        element={
-                            <ProtectedRoute>
-                                <AppTabsComponent />
-                            </ProtectedRoute>
-                        }
-                    />
+                        <Route path='/' element={<AppTabsComponent />} />
+                        <Route path="/app" element={<AppTabsComponent />} />
+                        <Route path="/signup" element={<SignUp />} />
+                        <Route path="/login" element={<Login />} />
                     </Routes>
                 </MatchProvider>
             </AuthProvider>
