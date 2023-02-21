@@ -33,9 +33,7 @@ function App() {
                     <Route
                         path="/app"
                         element={
-                            <ProtectedRoute>
                                 <AppTabsComponent />
-                            </ProtectedRoute>
                         }
                     />
                     </Routes>
