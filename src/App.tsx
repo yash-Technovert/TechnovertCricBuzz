@@ -24,9 +24,9 @@ function App() {
                       <Route
                           path="/matchsettings"
                           element={
-                              <ProtectedRoute>
+                            //   <ProtectedRoute>
                                   <MatchSettings key="1"/>
-                              </ProtectedRoute>
+                              /* </ProtectedRoute> */
                           }
                       />
 

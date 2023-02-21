@@ -32,4 +32,16 @@
   gap: 0.4em;
   margin-right:0.4em;
 }
+.player-list{
+  list-style-type:none;
+}
+.player-list>span{
+  border:1px solid darkblue;
+  color: red;
+  border-radius:50%;
+  padding-bottom: 5px !important;
+  padding-left: 10px;
+  padding-right: 10px;
+  cursor: pointer;
+}
 

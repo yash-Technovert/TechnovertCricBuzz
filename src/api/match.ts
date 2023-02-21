@@ -21,12 +21,12 @@ export async function getTeams()
     })
 }
 
-export async function createMatch(details:CreateMatch)
+export async function createMatch(matchDetails:any)
 {
     return await axios({
         method: 'post',
         url: baseUrl+'creatematch',
-        data:{details}
+        data:{matchDetails}
     })
 }
 
@@ -42,8 +42,8 @@ export async function getPlayers(teamId:string){
     return await axios({
         method: 'get',
         url: baseUrl+'getplayers',
-        data:{
-            teamId:teamId
+        params: {
+            teamId: teamId
         }
     })
 }

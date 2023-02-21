@@ -1,6 +1,5 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useContext, useReducer } from 'react';
 import MatchReducer, { initialState } from './MatchReducer';
-import { getScores } from '../api/match';
 import { InningStatResponse } from '../models/Innings';
 
 export const MatchContext = createContext(initialState)
@@ -8,40 +7,36 @@ export const MatchContext = createContext(initialState)
 export const MatchProvider = (props: any) => {
     const [state, dispatch] = useReducer(MatchReducer, initialState)
 
-    const getScore= async (id:string,matchId:string) => {
-        const response = await getScores(id,matchId)
-        .then((res) =>{
-            console.log(res.data)
-            setInningStat(res.data)
-        })
-    }
-
-
-    const setMatch = (match:any) => {
+    const setFirstInning = (inningStat: InningStatResponse) => {
         dispatch({
-            type: 'SET_MATCH',
-            payload: match
+            type: 'SET_FIRSTINNING',
+            payload: {
+                firstInning: inningStat
+            }
         })
     }
 
-    const setInningStat = (inningStat:any) => {
+    const setSecondInning = (inningStat: InningStatResponse) => {
         dispatch({
-            type: 'SET_INNING_STAT',
-            payload: inningStat
+            type: 'SET_SECONDINNING',
+            payload: {
+                secondInning: inningStat
+            }
         })
     }
 
+    const value = {
+        matchInfo: state.MatchInfo,
+        firstInning: state.firstInning,
+        secondInning: state.secondInning
+    }
     return (
-        <MatchContext.Provider value={{
-            Match: state.Match,
-            inningStat: state.inningStat,
-            // setMatch,
-            // setInningStat,
-        }}>
+        <MatchContext.Provider value={value}>
             {props.children}
         </MatchContext.Provider>
     )
 }
+
 
 
 
