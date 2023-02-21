@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useReducer } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import "../assets/styles/match.css";
 import PlayersInput from "./PlayersInput";
 import { GiTennisBall, GiCricketBat } from "react-icons/gi"
@@ -8,9 +8,9 @@ import { BsArrowRightCircleFill } from 'react-icons/bs'
 import { FaPlus } from 'react-icons/fa'
 import { createMatch, createTeam, getTeams } from "../api/match";
 import { Team } from "../models/Team";
-import { MatchContext } from "../contexts/MatchContext";
 import MatchReducer, { initialState } from "../contexts/MatchReducer";
 import { useNavigate } from "react-router-dom";
+import { Form } from "react-bootstrap";
 
 const MatchSettings = () => {
   const navigate = useNavigate();
@@ -34,11 +34,28 @@ const MatchSettings = () => {
     })
   }
 
+  const setTeamOne = (teamOne: any) => {
+    dispatch({
+      type: 'SET_TEAMONE',
+      payload: {
+        teamOne: teamOne
+      }
+    })
+  }
 
-  const [firstTeamTitle, changeFirstTeamTitle] = useState<any>("");
-  const [secondTeamTitle, changeSecondTeamTitle] = useState<any>("");
-  const [teamOneId, setTeamOneId] = useState<string>("");
-  const [teamTwoId, setTeamTwoId] = useState<string>("");
+  const setTeamTwo = (teamTwo: any) => {
+    dispatch({
+      type: 'SET_TEAMTWO',
+      payload: {
+        teamTwo: teamTwo
+      }
+    })
+  }
+
+  const [firstTeamTitle, changeFirstTeamTitle] = useState<any>('');
+  const [secondTeamTitle, changeSecondTeamTitle] = useState<any>('');
+  const [teamOneId, setTeamOneId] = useState<any>("");
+  const [teamTwoId, setTeamTwoId] = useState<any>("");
   const [newTeam, setNewTeam] = useState<string>("");
   const [tossWinner, setTossWinner] = useState("");
   const [optedOption, setOptedOption] = useState("");
@@ -85,10 +102,13 @@ const MatchSettings = () => {
         if (res.status === 200 && res.data) {
           setMatch(res.data.matchInfo[0])
           setFirstInning(res.data.firstInning[0])
-          navigate('/app');
+          setTeamOne(matchDetails.teamOnePlaying11)
+          setTeamTwo(matchDetails.teamTwoPlaying11)
+          setInterval(() => {
+            navigate('/app');
+          }, 3000)
         }
       })
-    console.dir(state);
   };
 
   const handleBackButton = () => {
@@ -100,6 +120,7 @@ const MatchSettings = () => {
     e.preventDefault();
     createTeam(newTeam)
       .then((res: any) => {
+
       })
     getTeams()
       .then((res: any) => {
@@ -113,8 +134,10 @@ const MatchSettings = () => {
 
 
   useEffect(() => {
+    console.log('in useEffect')
     if (teamOnePlaying11.length === 11 && teamTwoPlaying11.length === 11) {
       setMatchDetails({ ...matchDetails, teamOnePlayers: teamOnePlaying11, teamTwoPlayers: teamTwoPlaying11, teamOne: firstTeamTitle, teamTwo: secondTeamTitle, tossWinner: tossWinner, tossDecision: optedOption })
+      console.log('in if')
     }
   }, [teamOnePlaying11, teamTwoPlaying11])
 
@@ -184,57 +207,50 @@ const MatchSettings = () => {
             <div className="row d-flex justify-content-around mt-3 mb-3 p-3">
               <div className="col-5 bg-light border border-dark rounded p-4">
                 <h3>Team 1</h3>
-                <select
-                  className="form-select text-capitalize fs-3"
-                  value={firstTeamTitle}
-                  onChange={(e) => {
-                    let teamOne = teamList.find((team: Team) => team.id === e.target.value)
-                    setTeamOneId(e.target.value)
-                    changeFirstTeamTitle(teamOne?.teamName);
+                <Form.Select aria-label="Default select example" className='fw-bold fs-5' onChange={
+                  (e) => {
+                    setTeamOneId(e.target.children[e.target.selectedIndex].getAttribute('data-id'))
+                    changeFirstTeamTitle(e.target.value);
                     setTossWinner("")
                     changeProceedDisable(true)
-                  }}
+                  }
+                }
+                  value={firstTeamTitle}
                 >
-                  <option value="" disabled>
-                    Select Team 1
-                  </option>
-                  {teamList.map((team: Team) => {
+                  <option value='' disabled>Select Team</option>
+                  {teamList.map((team) => {
                     if (team.teamName !== secondTeamTitle) {
-                      return (<option value={team.id} key={team.id}>
+                      return (<option value={team.teamName} key={team.id} data-id={team.id} >
                         {team.teamName}
                       </option>)
                     }
                   })}
-                </select>
+                </Form.Select>
               </div>
               <div className="col-2 d-flex justify-content-center align-items-center fs-1 fw-bolder text-light">
                 VS
               </div>
               <div className="col-5 bg-light border border-dark rounded p-4">
                 <h3>Team 2</h3>
-                <select
-                  className="form-select text-capitalize fs-3 "
-                  value={secondTeamTitle}
-                  onChange={(e) => {
-                    let teamTwo = teamList.find((team: Team) => team.id === e.target.value)
-                    setTeamTwoId(e.target.value)
-                    changeSecondTeamTitle(teamTwo?.teamName);
+                <Form.Select aria-label="Default select example" className="fw-bold fs-5" onChange={
+                  (e) => {
+                    setTeamTwoId(e.target.children[e.target.selectedIndex].getAttribute('data-id'))
+                    changeSecondTeamTitle(e.target.value)
                     setTossWinner("")
                     changeProceedDisable(true)
-                    // invoke changeTeamOneplayers from here
-                  }}
+                  }
+                }
+                  value={secondTeamTitle}
                 >
-                  <option value="" disabled>
-                    Select Team 2
-                  </option>
+                  <option value='' disabled>Select Team</option>
                   {teamList.map((team) => {
                     if (team.teamName !== firstTeamTitle) {
-                      return (<option value={team.id} key={team.id}>
+                      return (<option value={team.teamName} key={team.id} data-id={team.id}>
                         {team.teamName}
                       </option>)
                     }
                   })}
-                </select>
+                </Form.Select>
               </div>
             </div>
             <div className="bg-light rounded">
@@ -269,7 +285,7 @@ const MatchSettings = () => {
                       type="radio"
                       value='bat'
                       id="teamOneTitle"
-                      onChange={(e => { setOptedOption(e.target.value); if (firstTeamTitle.length != 0 || secondTeamTitle.length != 0) changeProceedDisable(false) })}
+                      onChange={(e => { setOptedOption(e.target.value); if (firstTeamTitle.length !== 0 || secondTeamTitle.length !== 0) changeProceedDisable(false) })}
                       name="optedOption"
                     />
                     <h4 className="ms-1"><GiCricketBat className="text-warning fs-1"></GiCricketBat></h4>
@@ -279,7 +295,7 @@ const MatchSettings = () => {
                       type="radio"
                       value='bowl'
                       id="teamTwoTitle"
-                      onChange={(e => { setOptedOption(e.target.value); if (firstTeamTitle.length != 0 || secondTeamTitle.length != 0) changeProceedDisable(false) })}
+                      onChange={(e => { setOptedOption(e.target.value); if (firstTeamTitle.length !== 0 || secondTeamTitle.length !== 0) changeProceedDisable(false) })}
                       name="optedOption"
                     />
                     <h4 className="ms-1"><GiTennisBall className="text-success fs-1"></GiTennisBall></h4>
