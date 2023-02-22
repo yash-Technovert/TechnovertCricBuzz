@@ -37,7 +37,7 @@ const PlayersInput = ({ teamPlayers, playing11 }: propsType) => {
   }
   const optionList = teamPlayers.filter((player) => !list.includes(player));
 
-  
+
 
   return (
     < div className="d-flex justify-content-center flex-column">

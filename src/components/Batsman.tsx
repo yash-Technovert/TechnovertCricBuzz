@@ -4,11 +4,12 @@ import { Dropdown, Form, Table } from 'react-bootstrap';
 import './../assets/styles/match.css'
 
 // @ts-ignore
-const Batsman = () => {
+const Batsman = (props) => {
   const FIRST_BATSMAN = 1;
   const SECOND_BATSMAN = 2;
   const [batsman1, setBatsman1] = useState('');
   const [batsman2, setBatsman2] = useState('');
+
 
   return (
     <>
@@ -60,7 +61,7 @@ const Batsman = () => {
     </div>
     <div className="battings-stats d-flex justify-content-between">
         <p className='fw-bold'>Partnetship: <span>30(25)</span></p>
-        <p className='fw-bold'>4s: <span>2</span>, 6s: <span>1</span></p>
+        <p className='fw-bold'>4s: <span>{props.four}</span>, 6s: <span>{props.six}</span></p>
     </div>
     </>
   );

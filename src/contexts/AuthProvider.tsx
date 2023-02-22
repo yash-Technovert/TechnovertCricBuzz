@@ -1,11 +1,10 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Supabase } from '../api/supabase';
 
 
 export interface IAuthProvider {
     token: null;
-    onLogin: (arg0: { email: string; password: string }) => Promise<void>;
+    onLogin: (data: any) => void;
     onLogout: () => void;
     checkAuth: () => Promise<any>;
 }
@@ -15,23 +14,19 @@ const AuthContext = createContext<IAuthProvider | null>(null);
 const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(null);
     const navigate = useNavigate();
-    
+
     useEffect(() => {
-        const loggedInUser = localStorage.getItem("user");
+        const loggedInUser = localStorage.getItem("sb-jnyomjupkafvnwilgjws-auth-token");
         if (loggedInUser) {
             const foundUser = JSON.parse(loggedInUser);
             setToken(foundUser);
         }
     }, []);
-    
-    const handleLogin = async (arg0: { email: string; password: string }) => {
+
+    const handleLogin = (data: any) => {
         //   const token = await fakeAuth();
-        const base = new Supabase();
-        const response = await base.signInWithPassword({ email: arg0.email, password: arg0.password });
-        localStorage.setItem('user', JSON.stringify(response));
-        console.log(response);
-        setToken(response);
-        navigate('/app');
+        setToken(data);
+        navigate('/matchsettings');
     };
 
     const handleLogout = () => {
@@ -45,7 +40,7 @@ const AuthProvider = ({ children }) => {
             setToken(foundUser);
         }
         return token
-    };   
+    };
 
     const value: IAuthProvider = {
         token,
@@ -58,7 +53,7 @@ const AuthProvider = ({ children }) => {
 };
 
 const useAuth = () => {
-  return useContext(AuthContext) as IAuthProvider;
+    return useContext(AuthContext) as IAuthProvider;
 };
 
 export { AuthProvider, AuthContext, useAuth };

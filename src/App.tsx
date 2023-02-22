@@ -9,24 +9,34 @@ import Login from './components/Login/Login';
 import ProtectedRoute from './components/ProtectedRoutes';
 import SignUp from './components/SignUp/SignUp';
 import { AuthProvider } from './contexts/AuthProvider';
+import { MatchProvider } from './contexts/MatchContext';
 import MatchSettings from './components/MatchSettings';
+import MatchView from './components/MatchView';
 
 function App() {
   return (
         <>
             <AuthProvider>
-                <Routes>
+                <MatchProvider>
+                    <Routes>
                     <Route path='/' element={<Login />} />
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/login" element={<Login />} />
-                    <Route
-                        path="/matchsettings"
+                      <Route
+                          path="/matchsettings"
+                          element={
+                              <ProtectedRoute>
+                                  <MatchSettings key="1"/>
+                              </ProtectedRoute>
+                          }
+                      />
+                      <Route
+                        path='/matchview'
                         element={
-                            // <ProtectedRoute>
-                                <MatchSettings />
-                            // </ProtectedRoute>
+                            <MatchView key='2'/>
                         }
-                    />
+                      />
+
                     <Route
                         path="/app"
                         element={
@@ -35,7 +45,8 @@ function App() {
                             </ProtectedRoute>
                         }
                     />
-                </Routes>
+                    </Routes>
+                </MatchProvider>
             </AuthProvider>
         </>
     );

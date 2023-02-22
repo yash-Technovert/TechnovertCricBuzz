@@ -6,6 +6,8 @@ import { BiCoin } from "react-icons/bi"
 import { AiFillSetting } from "react-icons/ai"
 import { BsArrowRightCircleFill } from 'react-icons/bs'
 import { FaPlus } from 'react-icons/fa'
+import { createTeam, getTeams } from "../api/match";
+import { Team } from "../models/Team";
 
 const MatchSettings = () => {
   const [firstTeamTitle, changeFirstTeamTitle] = useState<string>("");
@@ -21,16 +23,7 @@ const MatchSettings = () => {
   const [addButtonDisabled, changeDisabled] = useState(true);
   const [errorMessage, setErrorMessage] = useState(false)
 
-  const [teamList] = useState<string[]>([
-    "Chennai super kings",
-    "Mumbai Indians",
-    "Royal Challengers",
-    "rajisthan Royals",
-    "Sunrisers hyderbad",
-    "Gujrat titans",
-    "lucknow kings",
-    "delhi capitals"
-  ]);
+  const [teamList, setTeamList] = useState<Team[]>([]);
   const [TeamOnePlayers, changeTeamOnePlayers] = useState<string[]>([
     "jack",
     "hill",
@@ -95,15 +88,39 @@ const MatchSettings = () => {
   const teamOnePlaying11 = (list: string[]) => {
     handleSelectedTeamTwo(list);
   };
-  const handleAddButton = (e: React.SyntheticEvent<HTMLFormElement>) => {
-    if (newTeam === 'asd') {
-      setErrorMessage(true)
-      e.preventDefault()
-    }
-    else {
+  const handleAddButton = (e: any) => {
+    e.preventDefault();
+    createTeam(newTeam)
+      .then((res: any) => {
+        console.log(res);
+      })
+    getTeams()
+      .then((res: any) => {
+        setTeamList(res.data);
+      })
+    hideAddTeamPannel(true);
 
-    }
+    changeDisplaySelectionPanel(false);
+    setNewTeam('');
   };
+
+  const handleTeamNameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTeam(e.target.value);
+    if (e.target.value === "") {
+      changeDisabled(true);
+      return;
+    }
+    changeDisabled(false);
+  };
+
+  useEffect(() => {
+    console.log('hello')
+    getTeams()
+      .then((res: any) => {
+        console.log(res.data);
+        setTeamList(res.data);
+      })
+  }, []);
 
   return (
     <>
@@ -178,9 +195,9 @@ const MatchSettings = () => {
                     Select Team 1
                   </option>
                   {teamList.map((team) => {
-                    if (team !== secondTeamTitle) {
-                      return (<option value={team} key={team}>
-                        {team}
+                    if (team.teamName !== secondTeamTitle) {
+                      return (<option value={team.teamName} key={team.id}>
+                        {team.teamName}
                       </option>)
                     }
                   })}
@@ -205,9 +222,9 @@ const MatchSettings = () => {
                     Select Team 2
                   </option>
                   {teamList.map((team) => {
-                    if (team !== firstTeamTitle) {
-                      return (<option value={team} key={team}>
-                        {team}
+                    if (team.teamName !== firstTeamTitle) {
+                      return (<option value={team.teamName} key={team.id}>
+                        {team.teamName}
                       </option>)
                     }
                   })}
