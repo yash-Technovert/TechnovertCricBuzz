@@ -31,7 +31,7 @@ function App() {
                           }
                       />
                       <Route
-                        path='/matchview'
+                        path='/matches'
                         element={
                             <MatchView key='2'/>
                         }

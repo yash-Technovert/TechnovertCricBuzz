@@ -7,8 +7,8 @@ const FairDelivery = () => {
   // @ts-ignore
   const [state, dispatch] = useReducer(MatchReducer, initialState)
 
-  const updateCurrentOver = async (ball: number) => {
-    await dispatch({ type: "UPDATE_CURRENT_OVER", payload: { currentOver: [...state.currentOver, ball] } })
+  const updateCurrentOver = (ball: number) => {
+    dispatch({ type: "UPDATE_CURRENT_OVER", payload: { currentOver: [...state.currentOver, ball] } })
   }
   return (
     <div className="mb-2">

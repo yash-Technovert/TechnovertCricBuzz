@@ -4,10 +4,14 @@ import Bowler from './bowler'
 import CurrentOver from './CurrentOver'
 import { Supabase } from '../api/supabase'
 import { InningStatResponse } from '../models/Innings'
+import { getScore } from '../api/match'
+import { log } from 'console'
 type PropsType = {
     isAdmin: boolean
 }
-const Live = ({isAdmin}:PropsType) => {
+
+const Live = ({ isAdmin }: PropsType) => {
+
     var data: InningStatResponse = {
         id: '',
         matchId: '',
@@ -26,7 +30,8 @@ const Live = ({isAdmin}:PropsType) => {
         six: 0
     }
     const [crr, setCrr] = React.useState(0.0)
-    const [inningData, setInningData] = React.useState(data)
+    const [inningData, setInningData] = React.useState<InningStatResponse>(data)
+    const [inningId, setInningId] = React.useState<any>()
     const base = new Supabase()
     const channel = base.supabase
         .channel('table-db-changes').
@@ -35,22 +40,62 @@ const Live = ({isAdmin}:PropsType) => {
                 event: 'UPDATE',
                 schema: 'public',
                 table: 'InningStat',
-                filter: 'id=eq.INDIAvAUSTRALIA:2/17/2023:I1',
-                // `id=eq.${inningId}'
+                filter: `id=eq.${inningId}`,
             },
             (payload: any) => {
                 data = payload.new
-                let setData = () => { setInningData(data); setCrr(data.runsScored / data.oversPlayed); }
+                console.log(payload.new)
+                let setData = () => {
+                    if (data.isFirstInning) {
+                        if (data.wickets == 10 || data.oversPlayed >= 6) {
+                            getCurrentScore()
+                        }
+                        else {
+
+                            setInningData(data);
+                            let crr = currentRunRate(data.runsScored, data.oversPlayed)
+                            setCrr(crr);
+                        }
+                    }
+                    else {
+                        setInningData(data);
+                        let crr = currentRunRate(data.runsScored, data.oversPlayed)
+                        setCrr(crr);
+                    }
+                }
                 setData()
             }).subscribe();
+
+    const currentRunRate = (runsScored: any, oversPlayed: any) => {
+        let balls = Math.floor(oversPlayed) * 6
+        let rem = (oversPlayed - Math.floor(oversPlayed)) * 10
+        let ballsPlayed = balls + rem
+        return (runsScored / (ballsPlayed / 6))
+    }
+
+    const getCurrentScore = async () => {
+        getScore('INDIAvAUSTRALIA:2/22/2023_1:40:48')
+            .then((res: any) => {
+                let inningID = res.data?.id
+                setInningId(inningID)
+                let setData = () => { setInningData(res.data); }
+                setData()
+                setCrr(currentRunRate(res.data?.runsScored, res.data?.oversPlayed));
+                console.log(res.data?.extras)
+            })
+    }
+    React.useEffect(() => {
+        getCurrentScore()
+    }, [inningId])
+
 
     return (
         <>
             <div className="scores d-flex justify-content-between py-2">
-                <p className='fw-bold fs-4 mb-0'>SRH: <span>{inningData.runsScored}</span>/<span>{inningData.wickets} </span>(<span>{inningData.oversPlayed}</span>)</p>
+                <p className='fw-bold fs-4 mb-0'>{inningData.teamName}: <span>{inningData.runsScored}</span>/<span>{inningData.wickets} </span>(<span>{inningData.oversPlayed}</span>)</p>
                 <p className='fw-bold fs-4 mb-0'>CRR: <span>{crr.toFixed(1)}</span></p>
             </div>
-            <Batsman four={inningData.four} six={inningData.six} isAdmin={isAdmin} ></Batsman>
+            <Batsman four={inningData.four} six={inningData.six} extras={inningData?.extras} isAdmin={isAdmin} ></Batsman>
             <Bowler isAdmin={isAdmin}></Bowler>
             <CurrentOver></CurrentOver>
         </>

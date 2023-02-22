@@ -18,7 +18,7 @@ class TeamStats
     teamName!: string
     runsScored!: number
     wickets!: number
-     oversPlayed!: number
+    oversPlayed!: number
     isFirstInning!: boolean
-     extras!: Extras
+    extras!: Extras
 }

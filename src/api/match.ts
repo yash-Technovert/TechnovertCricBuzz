@@ -60,12 +60,11 @@ export async function getMatchInfo(id:string){
 
 
 
-export async function getScores(id:string,matchId:string){
+export async function getScore(matchId:string){
     return await axios({
         method: 'get',
         url: baseUrl+'getscore',
-        data:{
-            id:id,
+        params:{
             matchId:matchId
         }
     })

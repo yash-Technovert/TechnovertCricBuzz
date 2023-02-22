@@ -7,6 +7,7 @@ import Live from './Live';
 import { Tabs, Tab } from 'react-bootstrap';
 
 const AppTabsComponent = () => {
+    const [isAdmin, setIsAdmin] = useState(true);
     const { onLogout } = useAuth();
 
     const matchData = getCurrentMatch();
@@ -47,7 +48,7 @@ const AppTabsComponent = () => {
     return (
         <div className="bg-white container my-4 p-3 border border-0 rounded-3">
             <Tabs
-                defaultActiveKey="live"
+                defaultActiveKey={isAdmin? "scoring" : "live"}
                 id="justify-tab-example"
                 className="fw-bold p-2 m-0"
                 justify

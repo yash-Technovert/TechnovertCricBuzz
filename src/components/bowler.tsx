@@ -45,8 +45,8 @@ const Bowler = (props) => {
         <div className="bowling-stats d-flex justify-content-between">
             <p className="fw-bold text-capitalize">extras: <span>2</span></p>
             <p className="fw-bold">
-                wd: <span>1, </span>
-                nb: <span>1, </span>
+                wd: <span>0, </span>
+                nb: <span>0, </span>
                 b:  <span>0, </span> 
                 lb: <span>0 </span>
             </p>

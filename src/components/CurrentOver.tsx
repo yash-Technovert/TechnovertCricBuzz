@@ -7,9 +7,9 @@ const CurrentOver = () => {
     const [over, setOver] = useState([]);
 
     useEffect(() => {
-        console.log(state.currentOver);
         setOver(state.currentOver);
-    });
+        console.log(over);
+    }, [state.currentOver]);
 
     return (
         <div className=" current-over bg-light">

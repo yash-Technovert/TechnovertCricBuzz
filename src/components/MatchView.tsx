@@ -3,37 +3,40 @@ import MatchStatus from "./MatchStatus";
 import "../assets/styles/match.css";
 import { finishedMatchStats } from "../models/MatchStatistics";
 import { Card } from "react-bootstrap";
-import {CiStreamOn} from 'react-icons/ci'
+import { CiStreamOn } from 'react-icons/ci'
+import { getMatches } from "../api/match";
 const MatchView = () => {
+
+
   const [liveMatches, changeLiveMatches] = useState<any[]>([
-  {
-    teamOne:"Technoverts Daaru",
-    teamTwo:"Technoverts super kings",
-    tossWinner:"Technoverts Daaru",
-    tossDecision:"Bat",
-    teamOneRuns:123,
-    teamOneWickets:2,
-    teamOneCurr:9.7,
-    teamOneOverPlayed:8.0,
-    teamTwoRuns:101,
-    teamTwoWickets:4,
-    teamTwoCurr:8.7,
-    teamTwoOverPlayed:9.0,
-  },
-  {
-    teamOne:"Technoverts kings",
-    teamTwo:"Team legends",
-    tossWinner:"Technoverts kings",
-    tossDecision:"Bowl",
-    teamOneRuns:89,
-    teamOneWickets:7,
-    teamOneCurr:5.7,
-    teamOneOverPlayed:9.0,
-    teamTwoRuns:0,
-    teamTwoWickets:4,
-    teamTwoCurr:7.7,
-    teamTwoOverPlayed:6.0,
-  }
+    {
+      teamOne: "Technoverts Daaru",
+      teamTwo: "Technoverts super kings",
+      tossWinner: "Technoverts Daaru",
+      tossDecision: "Bat",
+      teamOneRuns: 123,
+      teamOneWickets: 2,
+      teamOneCurr: 9.7,
+      teamOneOverPlayed: 8.0,
+      teamTwoRuns: 101,
+      teamTwoWickets: 4,
+      teamTwoCurr: 8.7,
+      teamTwoOverPlayed: 9.0,
+    },
+    {
+      teamOne: "Technoverts kings",
+      teamTwo: "Team legends",
+      tossWinner: "Technoverts kings",
+      tossDecision: "Bowl",
+      teamOneRuns: 89,
+      teamOneWickets: 7,
+      teamOneCurr: 5.7,
+      teamOneOverPlayed: 9.0,
+      teamTwoRuns: 0,
+      teamTwoWickets: 4,
+      teamTwoCurr: 7.7,
+      teamTwoOverPlayed: 6.0,
+    }
   ]);
   const [finishedMatches, changeFinishedMatches] = useState<
     finishedMatchStats[]
@@ -167,20 +170,28 @@ const MatchView = () => {
       matchTime: "12:00:00",
     },
   ]);
-//🔴
+
+  React.useEffect(() => {
+    getMatches()
+      .then((res: any) => {
+        console.log(res.data);
+        // changeLiveMatches(res.data.liveMatches);
+        // changeFinishedMatches(res.data.finishedMatches);
+      })
+  }, [])
   return (
     <div className="container mt-4 ">
       <div className="row bg-light m-4 rounded p-2 border border-dark">
         <p className="fs-3 fw-bold  mb-0">LIVE <CiStreamOn className="fs-3 text-danger"></CiStreamOn></p>
         <div className="row  pb-3 d-flex">
-          {liveMatches.length=== 0 && <p className='col-4 fs-3 m-auto font-dark'>No current live matches.</p>}
+          {liveMatches.length === 0 && <p className='col-4 fs-3 m-auto font-dark'>No current live matches.</p>}
           {liveMatches.length !== 0 &&
             liveMatches.map((match, index) => {
               return (
                 <div className="col-lg-6">
                   <Card className="border " >
                     <Card.Header className="d-flex">
-                    <Card.Title className="fw-bold text-nowrap fs-4">
+                      <Card.Title className="fw-bold text-nowrap fs-4">
                         {match.teamOne} VS {match.teamTwo}
                       </Card.Title>
                     </Card.Header>
@@ -189,10 +200,10 @@ const MatchView = () => {
                         {match.tossWinner} won the toss and elected to {match.tossDecision} .
                       </Card.Text>
                       <Card.Title className="d-flex ">
-                        <p className="text-primary">{match.teamOne}</p> {(match.teamOneRuns===0)?<p className="ms-auto">(Yet to Bat)</p>:<p className="ms-auto">{match.teamOneRuns}/{match.teamOneWickets} ({match.teamOneOverPlayed} Overs)</p>} 
+                        <p className="text-primary">{match.teamOne}</p> {(match.teamOneRuns === 0) ? <p className="ms-auto">(Yet to Bat)</p> : <p className="ms-auto">{match.teamOneRuns}/{match.teamOneWickets} ({match.teamOneOverPlayed} Overs)</p>}
                       </Card.Title>
                       <Card.Title className="d-flex ">
-                        <p className="text-primary">{match.teamTwo}</p> {(match.teamTwoRuns===0)?<p className="ms-auto">(Yet to Bat)</p>:<p className="ms-auto">{match.teamTwoRuns}/{match.teamTwoWickets} ({match.teamTwoOverPlayed} Overs)</p>}
+                        <p className="text-primary">{match.teamTwo}</p> {(match.teamTwoRuns === 0) ? <p className="ms-auto">(Yet to Bat)</p> : <p className="ms-auto">{match.teamTwoRuns}/{match.teamTwoWickets} ({match.teamTwoOverPlayed} Overs)</p>}
                       </Card.Title>
                       <hr></hr>
                       <div className="d-flex ">
@@ -215,7 +226,7 @@ const MatchView = () => {
         <div className="row row-cols-xl-3 row-cols-md-2 row-cols-sm-1 pb-3">
           {finishedMatches.map((matchDetails, index) => {
             return (
-              <div className="col">
+              <div className="col mb-3">
                 <MatchStatus
                   teamName={[
                     matchDetails.teamOneInningStat.teamName,
