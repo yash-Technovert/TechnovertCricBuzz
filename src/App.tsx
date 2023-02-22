@@ -11,6 +11,7 @@ import SignUp from './components/SignUp/SignUp';
 import { AuthProvider } from './contexts/AuthProvider';
 import { MatchProvider } from './contexts/MatchContext';
 import MatchSettings from './components/MatchSettings';
+import MatchView from './components/MatchView';
 
 function App() {
   return (
@@ -28,6 +29,12 @@ function App() {
                                   <MatchSettings key="1"/>
                               /* </ProtectedRoute> */
                           }
+                      />
+                      <Route
+                        path='/matchview'
+                        element={
+                            <MatchView key='2'/>
+                        }
                       />
 
                     <Route
