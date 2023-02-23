@@ -88,8 +88,6 @@ const MatchSettings = () => {
     e.preventDefault();
     console.log("Bbbb ", matchDetails)
     await dispatch(createMatchAPI(matchDetails))
-    console.log("matchDetails.teamOnePlaying11", matchDetails.teamOnePlaying11)
-    console.log("matchDetails.teamTwoPlaying11", matchDetails.teamTwoPlaying11)
 
     await dispatch({
       type: matchConstants.SET_TEAMONE,

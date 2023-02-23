@@ -26,7 +26,7 @@ const AppTabsComponent = () => {
                 <Tab eventKey="live" title="Live">
                     <Live isAdmin={false} matchId={matchId} />
                 </Tab>
-                {!isAdmin && <Tab eventKey="scoring" title="Scoring">
+                {isAdmin && <Tab eventKey="scoring" title="Scoring">
                     <ScoringTabComponent />
                 </Tab>}
             </Tabs>

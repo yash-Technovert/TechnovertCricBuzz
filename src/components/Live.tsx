@@ -5,12 +5,16 @@ import CurrentOver from './CurrentOver'
 import { Supabase } from '../api/supabase'
 import { InningStatResponse } from '../models/Innings'
 import { getScore } from '../api/match'
+import { useSelector } from 'react-redux'
 type PropsType = {
     isAdmin: boolean
     matchId: string
 }
 
 const Live = ({ isAdmin, matchId }: PropsType) => {
+
+    let matchIdFromState = useSelector((state: any) => state.matchInfo?.matchInfo.matchId)
+
 
     var data: InningStatResponse = {
         id: '',
@@ -81,6 +85,7 @@ const Live = ({ isAdmin, matchId }: PropsType) => {
     const getCurrentScore = async () => {
         getScore(matchId)
             .then((res: any) => {
+                console.log(res.data)
                 let inningID = res.data?.id
                 setInningId(inningID)
                 let setData = () => { setInningData(res.data); }
@@ -89,10 +94,14 @@ const Live = ({ isAdmin, matchId }: PropsType) => {
             })
     }
     React.useEffect(() => {
-        if (!isAdmin) {
-            getCurrentScore()
+        getCurrentScore()
+    }, [inningId, matchId, isAdmin])
+
+    React.useEffect(() => {
+        if (matchId.length <= 1) {
+            matchId = matchIdFromState
         }
-    }, [inningId, matchId,isAdmin])
+    }, [matchId, matchIdFromState])
 
 
     return (

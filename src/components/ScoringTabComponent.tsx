@@ -2,7 +2,7 @@ import Live from "./Live";
 import Scoring from "./Scoring";
 
 const ScoringTabComponent = () => {
-
+    
     return(
         <div className="scoring-tab">
             <Live isAdmin={true} matchId={''} />
