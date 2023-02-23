@@ -11,10 +11,12 @@ import SignUp from './components/SignUp/SignUp';
 import { AuthProvider } from './contexts/AuthProvider';
 import { MatchProvider } from './contexts/MatchContext';
 import MatchSettings from './components/MatchSettings';
+import { CookiesProvider } from "react-cookie";
 
 function App() {
   return (
         <>
+         <CookiesProvider>
             <AuthProvider>
                 <MatchProvider>
                     <Routes>
@@ -45,6 +47,7 @@ function App() {
                     </Routes>
                 </MatchProvider>
             </AuthProvider>
+            </CookiesProvider>
         </>
     );
 }

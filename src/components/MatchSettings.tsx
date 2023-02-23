@@ -22,9 +22,12 @@ import TeamDetails from "../action/TeamDetails";
 import createMatchAPI from "../action/MatchInfo/createMatch";
 
 import matchConstants from "../constants/matchConstants";
+import { useCookies } from "react-cookie";
 const MatchSettings = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<any>();
+  const [cookie]=useCookies(['token']);
+
 
   // const [state, dispatch] = useReducer(MatchReducer, initialState)
   const setMatch = async(matchInfo: any) => {
@@ -120,7 +123,7 @@ const MatchSettings = () => {
   const startMatch = async(e: any) => {
     e.preventDefault();
     console.log("Bbbb ",matchDetails)
-    await dispatch(createMatchAPI(matchDetails))
+    await dispatch(createMatchAPI(matchDetails,cookie.token))
     console.log("matchDetails.teamOnePlaying11",matchDetails.teamOnePlaying11)
     console.log("matchDetails.teamTwoPlaying11",matchDetails.teamTwoPlaying11)
 
@@ -143,7 +146,8 @@ const MatchSettings = () => {
   };
   const handleAddButton = (e: any) => {
     e.preventDefault();
-    createTeam(newTeam)
+    
+    createTeam(newTeam,cookie.token)
       .then((res: any) => {
 
       })

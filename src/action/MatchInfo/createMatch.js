@@ -7,9 +7,9 @@ const successInApiCall = (data) => {
     };
 };
 
-const createMatchAPI= (matchDetails) =>{
+const createMatchAPI= (matchDetails,token) =>{
     return async(dispatch) => {
-        return await createMatch(matchDetails)
+        return await createMatch(matchDetails,token)
         .then(res => { 
             console.log("From create Match Action ",res)
             dispatch(successInApiCall(res));

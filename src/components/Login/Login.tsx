@@ -3,10 +3,13 @@ import { Resolver, useForm } from 'react-hook-form';
 import { login } from '../../api/auth';
 import { useAuth } from '../../contexts/AuthProvider';
 import './Login.css';
+import { useCookies } from 'react-cookie';
+
 
 // @ts-ignore
 export default function Login() {
     const [error, setError] = useState('');
+    const [cookie, setCookie]=useCookies(['token']);
     type FormValues = {
         email: string;
         password: string;
@@ -35,6 +38,7 @@ export default function Login() {
                 setError(res.data.error.message);
             }
             else{
+                setCookie('token',res.headers.authorization,{ path: '/', maxAge: 86400 })
                 onLogin(res.data);
             }
         })

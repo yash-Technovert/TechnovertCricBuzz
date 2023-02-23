@@ -2,14 +2,18 @@ import axios from "axios";
 import { InningStatResponse } from "../models/Innings";
 import { CreateMatch } from "../models/Match";
 
+
 const baseUrl="http://localhost:3000/";
 
-export async function createTeam(teamName:string)
+export async function createTeam(teamName:string,token:any)
 {
     return await axios({
         method: 'post',
         url: baseUrl+'createteam',
-        data:{teamName}
+        data:{teamName},
+        headers: {
+            authorization: token
+        }
     })
 }
 
@@ -21,13 +25,16 @@ export async function getTeams()
     })
 }
 
-export async function createMatch(matchDetails:any)
+export async function createMatch(matchDetails:any, token: any)
 {
     console.log("Match Details form axios",matchDetails)
     const result = await axios({
         method: 'post',
         url: baseUrl+'creatematch',
-        data:{matchDetails}
+        data:{matchDetails},
+        headers: {
+            authorization: token
+        }
     })
     console.log("result from Create Match",result);
     return result;
@@ -74,7 +81,7 @@ export async function getScores(id:string,matchId:string){
     })
 }
 
-export async function updateScore(id:string,updates:any)
+export async function updateScore(id:string,updates:any, token:any)
 {
     return await axios({
         method: 'put',
@@ -82,6 +89,9 @@ export async function updateScore(id:string,updates:any)
         data:{
             updates:updates,
             inningId:id
+        },
+        headers: {
+            authorization: token
         }
     })
 }
