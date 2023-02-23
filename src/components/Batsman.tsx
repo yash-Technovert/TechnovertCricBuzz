@@ -2,13 +2,53 @@ import * as React from 'react';
 import { useState } from 'react';
 import {Form, Table } from 'react-bootstrap';
 import './../assets/styles/match.css'
+import { PlayerStat } from '../models/PlayerStat';
+import { Supabase } from '../api/supabase';
 
 // @ts-ignore
 const Batsman = (props) => {
+    var data: PlayerStat = {
+        id: '',
+        matchId: '',
+        runs: 0,
+        six: 0,
+        four: 0,
+        ballsPlayed: 0,
+        wickets: 0,
+        overs: 0,
+        runsConceded: 0,
+        maiden: 0,
+        name: '',
+        disableBatting: false,
+        disableBowling: false
+    }
     const [Partnetship, setPartnership] = useState(0)
     const [Batsman1, setBatsman1] = useState(0)
     const [Batsman2, setBatsman2] = useState(0)
     const [onStrike, setOnStrike] = useState(0)
+    const [playerId, setPlayerId] = useState<any>()
+    const [matchId, setmatchId] = useState<any>()
+    const [playerStat, setPlayerStat] = useState<PlayerStat>(data);
+    const base = new Supabase();
+    const channel = base.supabase
+        .channel('table-db-changes').
+        on('postgres_changes',
+            {
+                event: 'UPDATE',
+                schema: 'public',
+                table: 'PlayerStat',
+                filter: `id=eq.${playerId} && matchId=eq.${matchId}`,
+            },
+            (payload: any) => {
+                let setData = () => {
+                    data = payload.new 
+                    setPlayerStat(data);
+                    console.log("DATA ===>",data);
+                    console.log("PLayerStat -->", playerStat);
+                    
+                }
+                setData()
+            }).subscribe();
   return (
     <>
     <div className="batsman my-3">
