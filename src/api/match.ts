@@ -2,7 +2,7 @@ import axios from "axios";
 import { InningStatResponse } from "../models/Innings";
 import { CreateMatch } from "../models/Match";
 
-const baseUrl = "http://localhost:3000/";
+const baseUrl = process.env.REACT_APP_ROUTER_DOMAIN;
 
 export async function createTeam(teamName: string) {
   return await axios({
@@ -79,24 +79,13 @@ export async function updateScore(id: string, updates: any) {
   });
 }
 
-export async function getPlayerState(matchId: any) {
-  const result = await axios({
-    method: "get",
-    url: baseUrl + "getplayerstat",
-    params: {
-      matchId: matchId,
-    },
-  });
-  console.log("result", result);
-}
-
 export async function updatePlayerStat(
   id: string,
   matchId: string,
   updates: object
 ) {
   return await axios({
-    method: "post",
+    method: "put",
     url: baseUrl + "updateplayerstat",
     data: { updates: updates, inningId: id, matchId: matchId },
   });
