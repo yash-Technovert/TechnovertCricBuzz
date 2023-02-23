@@ -1,25 +1,30 @@
-import { ListGroup} from "react-bootstrap"
+import { ListGroup } from "react-bootstrap"
 import { useEffect, useReducer, useState } from "react"
 import MatchReducer, { initialState } from "../contexts/MatchReducer";
+import { useSelector } from "react-redux";
 
 // @ts-ignore
-const MatchComponent = () => {
-
-  const [state] = useReducer(MatchReducer, initialState)
+const MatchComponent = ({isAdmin,matchId}) => {
 
 
-  const [matchInfo, setMatchInfo] = useState<any>();
-  const [teamOne, setTeamOne] = useState<object[]>([]);
-  const [teamTwo, setTeamTwo] = useState<object[]>([]);
+  const [matchInfo, setMatchInfo] = useState<any>({});
+  const [teamOne, setTeamOne] = useState<any>([]);
+  const [teamTwo, setTeamTwo] = useState<any>([]);
+
+  const matchInformation = useSelector((state: any) => state.matchInfo)
+  const teamOneInfo = useSelector((state: any) => state.matchInfo?.teamOnePlaying11)
+  const teamTwoInfo = useSelector((state: any) => state.matchInfo?.teamTwoPlaying11)
 
   useEffect(() => {
-    setMatchInfo(state.matchInfo)
-    setTeamOne(state.teamOnePlaying11)
-    setTeamTwo(state.teamTwoPlaying11)
-  }, [state.matchInfo, state.teamOnePlaying11, state.teamTwoPlaying11])
+    setMatchInfo(matchInformation)
+    setTeamOne(teamOneInfo)
+    setTeamTwo(teamTwoInfo)
+  }, [])
+  console.log("matchInformation", matchInfo);
+
   return (
     <div className="match-info">
-      {/* <div className="match-details border border-muted border-2 rounded p-2 my-3">
+      <div className="match-details border border-muted border-2 rounded p-2 my-3">
         <p className="text-capitalize fw-bold fs-5 mb-0">between: <span>{matchInfo.teamOne}</span> v <span>{matchInfo.teamTwo}</span></p>
         <p className="text-capitalize fw-bold fs-5 mb-0">Toss: <span>{matchInfo.tossWinner} opt to {matchInfo.tossDecision}</span></p>
         <p className="text-capitalize fw-bold fs-5 mb-0">Venue: <span>retro drive inn, madhapur</span></p>
@@ -43,7 +48,7 @@ const MatchComponent = () => {
           })
           }
         </ListGroup>
-      </div> */}
+      </div>
     </div>
   )
 }

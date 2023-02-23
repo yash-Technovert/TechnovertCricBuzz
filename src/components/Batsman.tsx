@@ -5,7 +5,10 @@ import './../assets/styles/match.css'
 
 // @ts-ignore
 const Batsman = (props) => {
-
+    const [Partnetship, setPartnership] = useState(0)
+    const [Batsman1, setBatsman1] = useState(0)
+    const [Batsman2, setBatsman2] = useState(0)
+    const [onStrike, setOnStrike] = useState(0)
   return (
     <>
     <div className="batsman my-3">

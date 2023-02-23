@@ -1,56 +1,30 @@
 import React, { useEffect, useState, useReducer } from "react";
 import "../assets/styles/match.css";
 import PlayersInput from "./PlayersInput";
+//icons
 import { GiTennisBall, GiCricketBat } from "react-icons/gi"
 import { BiCoin } from "react-icons/bi"
 import { AiFillSetting } from "react-icons/ai"
 import { BsArrowRightCircleFill } from 'react-icons/bs'
 import { FaPlus } from 'react-icons/fa'
+
+//apis
 import { createMatch, createTeam, getTeams } from "../api/match";
+
 import { Team } from "../models/Team";
 import MatchReducer, { initialState } from "../contexts/MatchReducer";
 import { useNavigate } from "react-router-dom";
 import { Form } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 
+//action
+import TeamDetails from "../action/TeamDetails";
+import createMatchAPI from "../action/MatchInfo/createMatch";
+
+import matchConstants from "../constants/matchConstants";
 const MatchSettings = () => {
   const navigate = useNavigate();
-
-  const [state, dispatch] = useReducer(MatchReducer, initialState)
-
-  const setMatch = (matchInfo: any) => {
-    dispatch({
-      type: 'SET_MATCH',
-      payload: {
-        matchInfo: matchInfo
-      }
-    })
-  }
-  const setFirstInning = (firstInning: any) => {
-    dispatch({
-      type: 'SET_FIRSTINNING',
-      payload: {
-        firstInning: firstInning
-      }
-    })
-  }
-
-  const setTeamOne = (teamOne: any) => {
-    dispatch({
-      type: 'SET_TEAMONE',
-      payload: {
-        teamOne: teamOne
-      }
-    })
-  }
-
-  const setTeamTwo = (teamTwo: any) => {
-    dispatch({
-      type: 'SET_TEAMTWO',
-      payload: {
-        teamTwo: teamTwo
-      }
-    })
-  }
+  const dispatch = useDispatch<any>();
 
   const [firstTeamTitle, changeFirstTeamTitle] = useState<any>('');
   const [secondTeamTitle, changeSecondTeamTitle] = useState<any>('');
@@ -73,16 +47,29 @@ const MatchSettings = () => {
   const [matchDetails, setMatchDetails] = useState<any>({})
 
   useEffect(() => {
-    if (teamOnePlaying11.length === 11 && firstTeamTitle && teamTwoPlaying11.length === 11 && secondTeamTitle) {
+    if (teamOnePlaying11.length === 8 && firstTeamTitle && teamTwoPlaying11.length === 8 && secondTeamTitle) {
       changeStartDisable(false)
     }
+    else {
+      changeStartDisable(true)
+    }
   }, [teamOnePlaying11, teamTwoPlaying11, firstTeamTitle, secondTeamTitle]);
+
+  //to get and set up teams
+  useEffect(() => {
+    const getData = async () => {
+      await dispatch(TeamDetails()).then((res: any) => {
+        setTeamList(res.data);
+      });
+    }
+    getData()
+  }, [])
 
   const setTeamOnePlayers = (players: any) => {
     let arr: any[] = [...players]
     setTeamOnePlaying11(arr)
-
   }
+
   const setTeamTwoPlayers = (players: any) => {
     let arr: any[] = [...players]
     setTeamTwoPlaying11(arr)
@@ -97,21 +84,23 @@ const MatchSettings = () => {
     }
   };
 
-  const startMatch = (e: any) => {
+  const startMatch = async (e: any) => {
     e.preventDefault();
-    console.log(matchDetails)
-    createMatch(matchDetails)
-      .then((res: any) => {
-        if (res.status === 200 && res.data) {
-          setMatch(res.data.matchInfo[0])
-          setFirstInning(res.data.firstInning[0])
-          setTeamOne(matchDetails.teamOnePlaying11)
-          setTeamTwo(matchDetails.teamTwoPlaying11)
-          setInterval(() => {
-            navigate('/app');
-          }, 3000)
-        }
-      })
+    console.log("Bbbb ", matchDetails)
+    await dispatch(createMatchAPI(matchDetails))
+    console.log("matchDetails.teamOnePlaying11", matchDetails.teamOnePlaying11)
+    console.log("matchDetails.teamTwoPlaying11", matchDetails.teamTwoPlaying11)
+
+    await dispatch({
+      type: matchConstants.SET_TEAMONE,
+      payload: matchDetails,
+    })
+
+    await dispatch({
+      type: matchConstants.SET_TEAMTWO,
+      payload: matchDetails,
+    })
+    navigate('/app', { state: { matchId:matchDetails.matchInfo?.matchInfo.matchId } });
   };
 
   const handleBackButton = () => {
@@ -137,17 +126,11 @@ const MatchSettings = () => {
 
 
   useEffect(() => {
-    if (teamOnePlaying11.length === 11 && teamTwoPlaying11.length === 11) {
+    if (teamOnePlaying11.length === 8 && teamTwoPlaying11.length === 8) {
       setMatchDetails({ ...matchDetails, teamOnePlayers: teamOnePlaying11, teamTwoPlayers: teamTwoPlaying11, teamOne: firstTeamTitle, teamTwo: secondTeamTitle, tossWinner: tossWinner, tossDecision: optedOption })
     }
   }, [teamOnePlaying11, teamTwoPlaying11, firstTeamTitle, secondTeamTitle, tossWinner, optedOption, matchDetails])
 
-  useEffect(() => {
-    getTeams()
-      .then((res: any) => {
-        setTeamList(res.data);
-      })
-  }, []);
 
   return (
     <>

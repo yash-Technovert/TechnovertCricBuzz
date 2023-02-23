@@ -8,7 +8,6 @@ const CurrentOver = () => {
 
     useEffect(() => {
         setOver(state.currentOver);
-        console.log(over);
     }, [state.currentOver]);
 
     return (

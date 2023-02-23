@@ -5,7 +5,7 @@ const ScoringTabComponent = () => {
 
     return(
         <div className="scoring-tab">
-            <Live isAdmin={true} />
+            <Live isAdmin={true} matchId={''} />
             <div className="border border-dark my-2"></div>
             <Scoring/>
         </div>

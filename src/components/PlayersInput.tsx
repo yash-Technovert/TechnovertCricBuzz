@@ -3,6 +3,8 @@ import { getPlayers } from "../api/match";
 import '../assets/styles/match.css'
 import { Player } from "../models/Player";
 import { Dropdown } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import getPlayersDetails from "../action/MatchInfo/playersDetails";
 type PropsType = {
   teamId: string,
   setTeamPlayers: any
@@ -16,7 +18,7 @@ const PlayersInput = ({ teamId, setTeamPlayers }: PropsType) => {
   const [list, setList] = useState<Player[]>([]);
   const [selectedPlayers, setSelectedPlayers] = useState<any[]>([]);
   const [removeId, setRemoveId] = useState<string>('');
-
+  const dispatch = useDispatch<any>();
 
   const handleChange = (e: any) => {
     const { value, checked } = e.target;
@@ -39,13 +41,22 @@ const PlayersInput = ({ teamId, setTeamPlayers }: PropsType) => {
       checkBox.checked = false
     }, [removeId, selectedPlayers])
 
-  useEffect(() => {
-    getPlayers(teamId)
-      .then((res) => {
-        setList(res.data)
-      })
-  }, [teamId])
+  // useEffect(() => {
+  //   getPlayers(teamId)
+  //     .then((res) => {
+  //       setList(res.data)
+  //     })
+  // }, [teamId])
 
+  useEffect(()=>{
+    const getData = async() =>{
+      await dispatch(getPlayersDetails(teamId)).then((res:any)=>{
+        // console.log("Players ",res.data)
+        setList(res.data);
+      });
+    }
+    getData()
+  },[])
   useEffect(() => {
     if (removeId) {
       handleRemove()
@@ -53,11 +64,10 @@ const PlayersInput = ({ teamId, setTeamPlayers }: PropsType) => {
   }, [removeId, handleRemove])
 
   useEffect(() => {
-    if (selectedPlayers.length === 11) {
-      console.log('length of selected players is 11')
+    if (selectedPlayers.length === 8) {
       setTeamPlayers(selectedPlayers)
     }
-  }, [selectedPlayers, setTeamPlayers])
+  }, [selectedPlayers.length])
   return (
     <>
       <div className="d-flex justify-content-center">
