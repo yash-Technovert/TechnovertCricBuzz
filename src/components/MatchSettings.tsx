@@ -76,6 +76,9 @@ const MatchSettings = () => {
     if (teamOnePlaying11.length === 8 && firstTeamTitle && teamTwoPlaying11.length === 8 && secondTeamTitle) {
       changeStartDisable(false)
     }
+    else{
+      changeStartDisable(true)
+    }
   }, [teamOnePlaying11, teamTwoPlaying11, firstTeamTitle, secondTeamTitle]);
 
   const setTeamOnePlayers = (players: any) => {

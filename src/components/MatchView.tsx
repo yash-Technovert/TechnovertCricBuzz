@@ -21,7 +21,7 @@ const MatchView = () => {
   const handleClick = (e: any) => {
     let matchId = e.target.getAttribute('data-bs-matchId');
     setMatchId(matchId);
-    navigate('/app', { state: { matchId:matchId } })
+    navigate('/app', { state: { matchId: matchId } })
   };
 
   React.useEffect(() => {
@@ -79,7 +79,7 @@ const MatchView = () => {
           {liveMatches.length !== 0 &&
             liveMatches.map((match, index) => {
               return (
-                <div className="col-lg-6" key={match.matchId}>
+                <div className="col-lg-6" key={index}>
                   <Card className="border " >
                     <Card.Header className="d-flex">
                       <Card.Title className="fw-bold text-nowrap fs-4">

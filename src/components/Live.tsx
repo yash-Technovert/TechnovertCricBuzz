@@ -44,14 +44,12 @@ const Live = ({ isAdmin, matchId }: PropsType) => {
             },
             (payload: any) => {
                 data = payload.new
-                console.log(payload.new)
                 let setData = () => {
                     if (data.isFirstInning) {
                         if (data.wickets == 10 || data.oversPlayed >= 6) {
                             getCurrentScore()
                         }
                         else {
-
                             setInningData(data);
                             let crr = currentRunRate(data.runsScored, data.oversPlayed)
                             setCrr(crr);
@@ -73,6 +71,13 @@ const Live = ({ isAdmin, matchId }: PropsType) => {
         return (runsScored / (ballsPlayed / 6))
     }
 
+    const requiredRunRate = (runsTowin: number, oversRemaining: number) => {
+        let balls = Math.floor(oversRemaining) * 6
+        let rem = (oversRemaining - Math.floor(oversRemaining)) * 10
+        let ballsRemaining = balls + rem
+        return (runsTowin / (ballsRemaining / 6))
+    }
+
     const getCurrentScore = async () => {
         getScore(matchId)
             .then((res: any) => {
@@ -87,7 +92,7 @@ const Live = ({ isAdmin, matchId }: PropsType) => {
         if (!isAdmin) {
             getCurrentScore()
         }
-    }, [inningId, matchId])
+    }, [inningId, matchId,isAdmin])
 
 
     return (
@@ -103,7 +108,7 @@ const Live = ({ isAdmin, matchId }: PropsType) => {
                 <p className='fw-bold fs-4 mb-0'>CRR: <span>{crr.toFixed(1)}</span></p>
             </div>
             <Batsman isAdmin={isAdmin} four={inningData.four} six={inningData.six} ></Batsman>
-            <Bowler isAdmin={isAdmin} noBall={inningData.extras.noBall} wide={inningData.extras.wide}></Bowler>
+            <Bowler isAdmin={isAdmin} noBall={inningData.extras?.noBall} wide={inningData.extras?.wide}></Bowler>
             <CurrentOver></CurrentOver>
         </>
 

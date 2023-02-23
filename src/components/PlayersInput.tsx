@@ -54,7 +54,6 @@ const PlayersInput = ({ teamId, setTeamPlayers }: PropsType) => {
 
   useEffect(() => {
     if (selectedPlayers.length === 8) {
-      console.log('length of selected players is 8')
       setTeamPlayers(selectedPlayers)
     }
   }, [selectedPlayers])
