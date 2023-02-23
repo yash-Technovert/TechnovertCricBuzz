@@ -7,13 +7,14 @@ import { useDispatch } from "react-redux";
 import getPlayersDetails from "../action/MatchInfo/playersDetails";
 type PropsType = {
   teamId: string,
-  setTeamPlayers: any
+  setTeamPlayers: any,
+  isTeamOne:any
 }
 interface SelectedPlayer {
   id: string,
   name: string
 }
-const PlayersInput = ({ teamId, setTeamPlayers }: PropsType) => {
+const PlayersInput = ({ teamId, setTeamPlayers,isTeamOne }: PropsType) => {
 
   const [list, setList] = useState<Player[]>([]);
   const [selectedPlayers, setSelectedPlayers] = useState<any[]>([]);
@@ -50,7 +51,7 @@ const PlayersInput = ({ teamId, setTeamPlayers }: PropsType) => {
 
   useEffect(()=>{
     const getData = async() =>{
-      await dispatch(getPlayersDetails(teamId)).then((res:any)=>{
+      await dispatch(getPlayersDetails(teamId,isTeamOne)).then((res:any)=>{
         // console.log("Players ",res.data)
         setList(res.data);
       });

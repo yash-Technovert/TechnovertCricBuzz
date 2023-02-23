@@ -36,12 +36,6 @@ function App() {
                                 <AppTabsComponent />
                         }
                     />
-                    <Route
-                        path="/bidyut?id"
-                        element={
-                                <AppTabsComponent />
-                        }
-                    />
                     </Routes>
                 </MatchProvider>
             </AuthProvider>

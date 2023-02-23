@@ -3,14 +3,8 @@ import { useState } from 'react';
 import {Form, Table } from 'react-bootstrap';
 import './../assets/styles/match.css'
 
-// @ts-ignore
-import { useSelector } from "react-redux";
 const Batsman = (props:any) => {
-    const TeamOne = useSelector((state:any)=>state?.matchInfo?.teamOne)
-    const TeamTwo = useSelector((state:any)=>state?.matchInfo?.teamTwo)
-    const changeTeamHandler = () =>{
-        
-    }
+    
     return (
         <>
         <div className='row'>
@@ -22,36 +16,31 @@ const Batsman = (props:any) => {
                                 <label>Batting:  </label>
                             </div>
                             <div className='col-md-5'>
-                                <span><b>{TeamOne}</b></span>
+                                <span><b>{props.teamOne}</b></span>
                             </div>
                         </div>
                     </div>
                     <div className='col-md-6'>
                         <div className='row'>
                             <div className='col-md-2'>
-                                <label>Boaling:  </label>
+                                <label>Bowler:  </label>
                             </div>
                             <div className='col-md-5'>
-                                <span><b>{TeamTwo}</b></span>
+                                <span><b>{props.teamTwo}</b></span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div className='col-md-4'>
-                <form onClick={changeTeamHandler}>
-                    <div className='row'>
-                        <div className='col-md-6'>
-                            <label>Select Batting Team  </label>
-                        </div>
-                        <div className='col-md-6'>
-                            <select className='form-select'>
-                                <option>{TeamOne}</option>
-                                <option>{TeamTwo}</option>
-                            </select>
-                        </div>
+                <div className='row'>
+                    <div className='col-md-6'>
+                        <label>Select Batting Team  </label>
                     </div>
-                </form>
+                    <div className='col-md-6'>
+                        <button onClick={props.changeTeamHandler} className='btn btn-success w-100'>Change</button>
+                    </div>
+                </div>
             </div>
         </div>
         <div className="batsman my-3">
@@ -69,12 +58,16 @@ const Batsman = (props:any) => {
                 <tbody>
                     <tr>
                         <td className='ps-3 pe-5 py-3 col-6'>
-                            {props.isAdmin ?
-                                <Form.Select aria-label="Default select example">
-                                    <option>Batsman</option>
-                                    <option value="1">Batsman</option>
-                                    <option value="2">Batsman</option>
-                                    <option value="3">Batsman</option>
+                            {props.isAdmin ? 
+                                <Form.Select aria-label="Default select example" onChange={(e:any) => props.setBatsManOne(e.target.value)}>
+                                    {
+                                        props.teamOnePlayers?
+                                        props.teamOnePlayers.map((batsman2:any)=>{
+                                            return <option value={batsman2.id}>{batsman2.name}</option>
+                                        }):props.teamOnePlaying11.map((batsman2:any)=>{
+                                            return <option value={batsman2.id}>{batsman2.name}</option>
+                                        })
+                                    }
                                 </Form.Select>
                                 :
                                 <p className='mt-2 mb-0'>Batsman</p>
@@ -89,11 +82,15 @@ const Batsman = (props:any) => {
                     <tr className='py-5'>
                         <td className='ps-3 pe-5 py-3 col-6'>
                             {props.isAdmin ? 
-                                <Form.Select aria-label="Default select example">
-                                    <option>Batsman</option>
-                                    <option value="1">Batsman</option>
-                                    <option value="2">Batsman</option>
-                                    <option value="3">Batsman</option>
+                                <Form.Select aria-label="Default select example" onChange={(e:any) => props.setBatsManTwo(e.target.value)}>
+                                    {
+                                        props.teamOnePlayers?
+                                        props.teamOnePlayers.map((batsman2:any)=>{
+                                            return <option value={batsman2.id}>{batsman2.name}</option>
+                                        }):props.teamOnePlaying11.map((batsman2:any)=>{
+                                            return <option value={batsman2.id}>{batsman2.name}</option>
+                                        })
+                                    }
                                 </Form.Select>
                                 :
                                 <p className='mt-2 mb-0'>Batsman</p>

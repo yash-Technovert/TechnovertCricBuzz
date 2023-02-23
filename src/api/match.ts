@@ -85,3 +85,14 @@ export async function updateScore(id:string,updates:any)
         }
     })
 }
+
+export async function getPlayerState(matchId:any){ 
+    const result =  await axios({
+        method: 'get',
+        url: baseUrl+'getplayerstat',
+        params:{
+            matchId:matchId,
+        }
+    })
+    console.log("result",result)
+}

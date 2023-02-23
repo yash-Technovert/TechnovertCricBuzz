@@ -15,7 +15,7 @@ import { Team } from "../models/Team";
 import MatchReducer, { initialState } from "../contexts/MatchReducer";
 import { useNavigate } from "react-router-dom";
 import { Form } from "react-bootstrap";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 //action
 import TeamDetails from "../action/TeamDetails";
@@ -69,7 +69,6 @@ const MatchSettings = () => {
   const [newTeam, setNewTeam] = useState<string>("");
   const [tossWinner, setTossWinner] = useState("");
   const [optedOption, setOptedOption] = useState("");
-
   const [displaySelectionPanel, changeDisplaySelectionPanel] = useState<boolean>(false);
   const [proceedButtonDisable, changeProceedDisable] = useState<boolean>(true);
   const [startButtonDisable, changeStartDisable] = useState<boolean>(true);
@@ -102,7 +101,7 @@ const MatchSettings = () => {
     let arr: any[] = [...players]
     setTeamOnePlaying11(arr)
   }
-  
+
   const setTeamTwoPlayers = (players: any) => {
     let arr: any[] = [...players]
     setTeamTwoPlaying11(arr)
@@ -370,6 +369,7 @@ const MatchSettings = () => {
                 <PlayersInput
                   teamId={teamOneId}
                   setTeamPlayers={setTeamOnePlayers}
+                  isTeamOne={true}
                 />
               </div>
               <div
@@ -383,6 +383,7 @@ const MatchSettings = () => {
                 <PlayersInput
                   teamId={teamTwoId}
                   setTeamPlayers={setTeamTwoPlayers}
+                  isTeamOne={false}
                 />
               </div>
             </div>
