@@ -19,8 +19,7 @@ const initialState = {
                 matchInfo:payload.data.matchInfo[0],
                 firstInning:payload.data.firstInning[0]
             }
-        case "SET_MATCH":
-            state.matchInfo = action.payload.matchInfo;
+        case matchConstants.CHANGE_TEAMS:
             return state;
         case "SET_FIRSTINNING":
             state.firstInning = action.payload.firstInning;
