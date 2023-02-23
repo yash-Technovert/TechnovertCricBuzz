@@ -87,8 +87,8 @@ const MatchView = () => {
                       </Card.Title>
                     </Card.Header>
                     <Card.Body className="text-capitalize">
-                      <Card.Text className="text-capitalize  fs-5">
-                        {match.tossWinner} won the toss and elected to {match.tossDecision} .
+                      <Card.Text className="text-capitalize " style={{fontSize:'1rem'}}>
+                        {match.tossWinner} won the toss and elected to {match.tossDecision} 
                       </Card.Text>
                       <Card.Title className="d-flex ">
                         <p className="text-primary">{match.teamOne}</p> {(match.teamOneInningStat.runsScored === 0) ? <p className="ms-auto">(Yet to Bat)</p> : <p className="ms-auto">{match.teamOneInningStat.runsScored}/{match.teamOneInningStat.wickets} ({match.teamOneInningStat.oversPlayed})</p>}
@@ -115,8 +115,8 @@ const MatchView = () => {
         </div>
       </div>
       <div className="row bg-light m-4 rounded p-2">
-        <p className=" fs-3 fw-bold mb-0">COMPLETED </p>
-        <div className="row row-cols-xl-3 row-cols-md-2 row-cols-sm-1 pb-3">
+        <p className=" fs-3 fw-bold mb-0" style={{textAlign:'center'}}>COMPLETED </p>
+        <div className="row row-cols-xl-3 row-cols-md-2 row-cols-sm-1 pb-3 d-flex m-auto">
           {finishedMatches.map((matchDetails, index) => {
             return (
               <div className="col mb-3">
