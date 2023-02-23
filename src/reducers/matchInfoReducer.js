@@ -28,15 +28,18 @@ const initialState = {
                 teamTwoPlaying11:payload.teamOnePlayers
             }
         case matchConstants.TEAM_ONE_API_SUCCESS:
+            const TeamOneStats=payload.data.map(obj => ({ ...obj, runs:0,ballsPlayed:0,four:0,six:0,wickets:0,overs:0, runsConceded:0, maiden:0, disableBatting:0, disableBowling:0}))
             return {
                 ...state,
-                teamOnePlaying11:payload.data
+                teamOnePlaying11:TeamOneStats
             }
         case matchConstants.TEAM_TWO_API_SUCCESS:
+            const TeamTwoStats=payload.data.map(obj => ({ ...obj, runs:0,ballsPlayed:0,four:0,six:0,wickets:0,overs:0, runsConceded:0, maiden:0, disableBatting:0, disableBowling:0}))
             return {
                 ...state,
-                teamTwoPlaying11:payload.data
+                teamTwoPlaying11:TeamTwoStats
             }
+        
         case "SET_SECONDINNING":
             state.secondInning = action.payload.secondInning;
             return state;

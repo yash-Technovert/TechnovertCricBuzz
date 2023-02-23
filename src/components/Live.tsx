@@ -41,7 +41,7 @@ const Live = ({isAdmin}:PropsType) => {
     const [isChangeTeam,setIsSetTeam]= React.useState<any>(false);
     const [batsManOne,setBatsManOne] = React.useState<any>();
     const [batsManTwo,setBatsManTwo] = React.useState<any>();
-
+    const [currentBolwer,setCurrentBolwer] = React.useState<any>();
     const TeamOneName = useSelector((state:any)=>state?.matchInfo?.teamOne)
     const TeamTwoName = useSelector((state:any)=>state?.matchInfo?.teamTwo)
     const teamOnePlaying11 = useSelector((state:any)=>state?.matchInfo?.teamOnePlaying11)
@@ -70,6 +70,10 @@ const Live = ({isAdmin}:PropsType) => {
             },
         })    
         setIsSetTeam(!isChangeTeam)
+        setBatsManOne(undefined)
+        setBatsManTwo(undefined)
+        setCurrentBolwer(undefined)
+
     }
     
     const channel = base.supabase
@@ -87,15 +91,18 @@ const Live = ({isAdmin}:PropsType) => {
                 let setData = () => { setInningData(data); setCrr(data.runsScored / data.oversPlayed); }
                 setData()
             }).subscribe();
+    console.log("batsManOne",batsManOne)
+    console.log("batsManTwo",batsManTwo)
+    console.log("Team 2",teamTwoPlaying11)
 
     return (
         <>
             <div className="scores d-flex justify-content-between py-2">
                 <p className='fw-bold fs-4 mb-0'>{teamOne}: <span>{inningData.runsScored}</span>/<span>{inningData.wickets} </span>(<span>{inningData.oversPlayed}</span>)</p>
-                <p className='fw-bold fs-4 mb-0'>{teamTwo}: <span>{crr.toFixed(1)}</span></p>
+                <p className='fw-bold fs-4 mb-0'>CRR: <span>{crr.toFixed(1)}</span></p>
             </div>
             <Batsman four={inningData.four} six={inningData.six} isAdmin={isAdmin} teamOne={teamOne} teamTwo={teamTwo} teamOnePlayers={teamOnePlayers} changeTeamHandler={changeTeamHandler} setBatsManOne={setBatsManOne} setBatsManTwo={setBatsManTwo} batsManOne={batsManOne} batsManTwo={batsManTwo} teamOnePlaying11={teamOnePlaying11}></Batsman>
-            <Bowler isAdmin={isAdmin} teamTwoPlayers={teamTwoPlayers} teamTwoPlaying11={teamTwoPlaying11}></Bowler>
+            <Bowler isAdmin={isAdmin} teamTwoPlayers={teamTwoPlayers} teamTwoPlaying11={teamTwoPlaying11} currentBolwer={currentBolwer} setCurrentBolwer={setCurrentBolwer}></Bowler>
             <CurrentOver></CurrentOver>
         </>
 

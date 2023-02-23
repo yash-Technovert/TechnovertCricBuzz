@@ -25,4 +25,5 @@ const getPlayersDetails= (teamId,isTeamOne) =>{
         });
     };
 }
+
 export default getPlayersDetails;

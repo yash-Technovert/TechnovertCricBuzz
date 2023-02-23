@@ -23,16 +23,6 @@ const AppTabsComponent = () => {
     const [activeTab, setActiveTab] = useState('Scoring');
 
     const dispatch = useDispatch<any>();
-    const matchId = useSelector((state:any)=>state.matchInfo?.matchInfo?.id)
-    console.log("matchId ",matchId)
-    useEffect(()=>{
-        const getAllPlayingPlayersStats = async()=>{
-            await dispatch(getPlayersStats(matchId)).then((res:any)=>{
-                console.log("auto res",res)
-            });
-        }
-        getAllPlayingPlayersStats()
-    },[])
 
     const handleEndMatch = () => {
         handleEndInnings();

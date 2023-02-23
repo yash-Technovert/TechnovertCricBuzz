@@ -6,6 +6,23 @@ import { useSelector } from "react-redux";
 
 // @ts-ignore
 const Bowler = (props) => {
+    const [blowerStats,setBlowerStats]=useState<any>(undefined)
+
+    React.useEffect(()=>{
+        const checkBlowerStats = async()=>{
+            if(props.currentBolwer){
+                console.log("if one",props.currentBolwer)
+                props.teamTwoPlayers.forEach((obj:any)=>{
+                    if(obj.id===props.currentBolwer){
+                        setBlowerStats(obj)
+                    }
+                })
+            }
+        }
+
+
+        checkBlowerStats();
+    },[props.currentBolwer])
     return (
         <>
             <div className="bowler">
@@ -24,7 +41,9 @@ const Bowler = (props) => {
                     <tr>
                         <td className='ps-3 pe-5 py-3 col-6'>
                             {props.isAdmin ?
-                                <Form.Select aria-label="Default select example">
+                                <Form.Select aria-label="Default select example" onChange={(e)=> props.setCurrentBolwer(e.target.value)}>
+                                    {console.log("bolwer",props.teamTwoPlayers)}
+                                    <option>--select--</option>
                                     {
                                         props.teamTwoPlayers?
                                         props.teamTwoPlayers.map((bolwer:any)=>{
@@ -38,11 +57,26 @@ const Bowler = (props) => {
                                 <p className='mt-2 mb-0'>Bowler</p>
                             }
                         </td>
-                        <td><p className='mt-3'>0.5</p></td>
+                        {blowerStats && (<>
+                            {/* Player One  */}
+                            {/* {
+                                let balls = Math.floor(oversPlayed) * 6
+                                let rem = (oversPlayed - Math.floor(oversPlayed)) * 10 
+                                let ballsPlayed = balls + rem
+                                return (runsScored / (ballsPlayed / 6))
+                            } */}
+                            {console.log("Bolwer Stats")}
+                            <td><p className='mt-3'>{blowerStats.overs}</p></td>
+                            <td><p className='mt-3'>{blowerStats.runsConceded}</p></td>
+                            <td><p className='mt-3'>{blowerStats.maiden}</p></td>
+                            <td><p className='mt-3'>{blowerStats.wickets}</p></td>
+                            <td><p className='mt-3'></p></td>
+                        </>)}
+                        {/* <td><p className='mt-3'>0.5</p></td>
                         <td><p className='mt-3'>0</p></td>
                         <td><p className='mt-3'>10</p></td>
                         <td><p className='mt-3'>1</p></td>
-                        <td><p className='mt-3'>12</p></td>
+                        <td><p className='mt-3'>12</p></td> */}
                     </tr>
                 </tbody>
         </Table>
