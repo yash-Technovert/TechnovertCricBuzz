@@ -7,7 +7,7 @@ import { Tabs, Tab } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 
 const AppTabsComponent = () => {
-    const [isAdmin, setIsAdmin] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(true);
     const { onLogout } = useAuth();
     const [activeTab, setActiveTab] = useState('Scoring');
     const { state } = useLocation();
@@ -15,7 +15,7 @@ const AppTabsComponent = () => {
     return (
         <div className="bg-white container my-4 p-3 border border-0 rounded-3">
             <Tabs
-                defaultActiveKey={isAdmin ? "scoring" : "live"}
+                defaultActiveKey="live"
                 id="justify-tab-example"
                 className="fw-bold p-2 m-0"
                 justify
