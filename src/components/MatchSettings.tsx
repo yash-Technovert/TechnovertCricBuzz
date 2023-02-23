@@ -73,7 +73,7 @@ const MatchSettings = () => {
   const [matchDetails, setMatchDetails] = useState<any>({})
 
   useEffect(() => {
-    if (teamOnePlaying11.length === 11 && firstTeamTitle && teamTwoPlaying11.length === 11 && secondTeamTitle) {
+    if (teamOnePlaying11.length === 8 && firstTeamTitle && teamTwoPlaying11.length === 8 && secondTeamTitle) {
       changeStartDisable(false)
     }
   }, [teamOnePlaying11, teamTwoPlaying11, firstTeamTitle, secondTeamTitle]);
@@ -103,6 +103,7 @@ const MatchSettings = () => {
     createMatch(matchDetails)
       .then((res: any) => {
         if (res.status === 200 && res.data) {
+          console.log(res.data)
           setMatch(res.data.matchInfo[0])
           setFirstInning(res.data.firstInning[0])
           setTeamOne(matchDetails.teamOnePlaying11)
@@ -137,7 +138,7 @@ const MatchSettings = () => {
 
 
   useEffect(() => {
-    if (teamOnePlaying11.length === 11 && teamTwoPlaying11.length === 11) {
+    if (teamOnePlaying11.length === 8 && teamTwoPlaying11.length === 8) {
       setMatchDetails({ ...matchDetails, teamOnePlayers: teamOnePlaying11, teamTwoPlayers: teamTwoPlaying11, teamOne: firstTeamTitle, teamTwo: secondTeamTitle, tossWinner: tossWinner, tossDecision: optedOption })
     }
   }, [teamOnePlaying11, teamTwoPlaying11, firstTeamTitle, secondTeamTitle, tossWinner, optedOption, matchDetails])

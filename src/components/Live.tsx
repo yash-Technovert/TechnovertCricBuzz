@@ -5,12 +5,12 @@ import CurrentOver from './CurrentOver'
 import { Supabase } from '../api/supabase'
 import { InningStatResponse } from '../models/Innings'
 import { getScore } from '../api/match'
-import { log } from 'console'
 type PropsType = {
     isAdmin: boolean
+    matchId: string
 }
 
-const Live = ({ isAdmin }: PropsType) => {
+const Live = ({ isAdmin, matchId }: PropsType) => {
 
     var data: InningStatResponse = {
         id: '',
@@ -74,29 +74,36 @@ const Live = ({ isAdmin }: PropsType) => {
     }
 
     const getCurrentScore = async () => {
-        getScore('INDIAvAUSTRALIA:2/22/2023_1:40:48')
+        getScore(matchId)
             .then((res: any) => {
                 let inningID = res.data?.id
                 setInningId(inningID)
                 let setData = () => { setInningData(res.data); }
                 setData()
                 setCrr(currentRunRate(res.data?.runsScored, res.data?.oversPlayed));
-                console.log(res.data?.extras)
             })
     }
     React.useEffect(() => {
-        getCurrentScore()
-    }, [inningId])
+        if (!isAdmin) {
+            getCurrentScore()
+        }
+    }, [inningId, matchId])
 
 
     return (
         <>
+            {!inningData.isFirstInning && <div className="target d-flex justify-content-between py-2 bg-dark text-white">
+                <p className='fw-bold fs-5 mb-0'>Target</p>
+                <p className='fw-bold fs-5 mb-0'>RRR</p>
+            </div>}
             <div className="scores d-flex justify-content-between py-2">
                 <p className='fw-bold fs-4 mb-0'>{inningData.teamName}: <span>{inningData.runsScored}</span>/<span>{inningData.wickets} </span>(<span>{inningData.oversPlayed}</span>)</p>
+                {inningData.isFirstInning && <p className='fw-bold fs-5 mb-0 bg-dark text-white p-2 border rounded'>1st Innings</p>}
+                {!inningData.isFirstInning && <p className='fw-bold fs-5 mb-0 bg-dark text-white p-2 border rounded'>2nd Innings</p>}
                 <p className='fw-bold fs-4 mb-0'>CRR: <span>{crr.toFixed(1)}</span></p>
             </div>
-            <Batsman four={inningData.four} six={inningData.six} extras={inningData?.extras} isAdmin={isAdmin} ></Batsman>
-            <Bowler isAdmin={isAdmin}></Bowler>
+            <Batsman isAdmin={isAdmin} four={inningData.four} six={inningData.six} ></Batsman>
+            <Bowler isAdmin={isAdmin} noBall={inningData.extras.noBall} wide={inningData.extras.wide}></Bowler>
             <CurrentOver></CurrentOver>
         </>
 

@@ -14,6 +14,7 @@ export const MatchProvider = (props: any) => {
         teamOne: state.teamOne,
         teamTwo: state.teamTwo,
         currentOver: state.currentOver,
+        matchId: state.matchId,
     }
     return (
         <MatchContext.Provider value={value}>

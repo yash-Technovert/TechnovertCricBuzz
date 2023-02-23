@@ -64,7 +64,7 @@ const Batsman = (props) => {
     </div>
     <div className="battings-stats d-flex justify-content-between">
         <p className='fw-bold'>Partnetship: <span>30(25)</span></p>
-        <p className='fw-bold'>4s: <span>{props.four}</span>, 6s: <span>{props.six}</span></p>
+        <p className='fw-bold'>4s: <span>{props.four || 0}</span>, 6s: <span>{props.six || 0}</span></p>
     </div>
     </>
   );

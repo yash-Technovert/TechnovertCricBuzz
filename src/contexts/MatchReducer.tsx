@@ -6,7 +6,8 @@ export const initialState = {
     secondInning: {},
     teamOne: {},
     teamTwo: {},
-    currentOver: []
+    currentOver: [],
+    matchId:''
 }
 
 
@@ -29,6 +30,9 @@ const MatchReducer = (state: any, action: any) => {
             return state;
         case "UPDATE_CURRENT_OVER":
             state.currentOver = action.payload.currentOver;
+            return state;
+        case "SET_MATCH_ID":
+            state.matchId = action.payload.matchId;
             return state;
         default:
             return state

@@ -1,24 +1,26 @@
 export class finishedMatchStats
 {
-    id!: string
+    matchId!: string
+    teamOne!: string
+    teamTwo!: string
     teamOneInningStat!: TeamStats
     teamTwoInningStat!: TeamStats
-     tossWinner!: string
-     matchWinner!: string
-    matchTime!: string
+    matchWinner!: string
 }
-class Extras{
-    wide!: number
-    noBall!: number
-    bye!: number
-    legBye!: number
+
+export class ongoingMatchStats
+{
+    matchId!: string
+    teamOne!: string
+    teamTwo!: string
+    teamOneInningStat!: TeamStats
+    teamTwoInningStat!: TeamStats
+    tossWinner!: string
+    tossDecision!: string
 }
 class TeamStats
 {
-    teamName!: string
     runsScored!: number
     wickets!: number
     oversPlayed!: number
-    isFirstInning!: boolean
-    extras!: Extras
 }

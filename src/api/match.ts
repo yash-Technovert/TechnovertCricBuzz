@@ -52,8 +52,8 @@ export async function getMatchInfo(id:string){
     return await axios({
         method: 'get',
         url: baseUrl+'getmatchinfo',
-        data:{
-            id:id
+        params:{
+            matchId:id
         }
     })
 }
