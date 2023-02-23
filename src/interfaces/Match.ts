@@ -1,4 +1,5 @@
 import { PlayerType } from "../enums/Match";
+import { Player } from "../models/Player";
 
 export interface Match {
   id: string;
@@ -46,12 +47,4 @@ export interface Team {
   players: Player[],
   logo: string,
   captainId: string
-}
-
-export interface Player { 
-  id: string,
-  name: string,
-  jerseyNumber: string,
-  playerType: PlayerType,
-  teamName: string
 }
