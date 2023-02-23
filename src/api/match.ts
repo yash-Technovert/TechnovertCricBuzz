@@ -2,7 +2,7 @@ import axios from "axios";
 import { InningStatResponse } from "../models/Innings";
 import { CreateMatch } from "../models/Match";
 
-const baseUrl="http://localhost:3000/";
+const baseUrl="http://localhost:8080/";
 
 export async function createTeam(teamName:string)
 {
@@ -32,6 +32,18 @@ export async function createMatch(matchDetails:any)
     return result;
 }
 
+export async function getPlayerState(matchId:any,inningId:any)
+{
+    return await axios({
+        method: 'get',
+        url: baseUrl+'getplayerstate',
+        params:{
+            id:inningId,
+            matchId:matchId
+        }
+    })
+}
+
 export async function getMatches()
 {
     return await axios({
@@ -55,7 +67,31 @@ export async function getMatchInfo(id:string){
         method: 'get',
         url: baseUrl+'getmatchinfo',
         params:{
-            id:id
+            matchId:id
+        }
+    })
+}
+
+export async function getFinishedMatches(matchId:string)
+{
+    return await axios({
+        method: 'get',
+        url: baseUrl+'getfinishedmatches',
+        params:{
+            matchId:matchId
+        }
+    })
+}
+
+export async function updatePlayerStat(id:string,matchId:string,updates:object)
+{
+    return await axios({
+        method: 'put',
+        url: baseUrl+'updateplayerstat',
+        data:{
+            updates:updates,
+            inningId:id,
+            matchId:matchId
         }
     })
 }
@@ -92,6 +128,16 @@ export async function updatePlayerStat(id: string, matchId: string, updates: obj
             updates:updates,
             id:id,
             matchId: matchId
+        }
+    })
+}
+
+export async function getSelectedPlayers(matchId:string): Promise<any>{
+    return await axios({
+        method: 'get',
+        url: baseUrl+'getselectedplayers',
+        params:{
+            matchId:matchId
         }
     })
 }

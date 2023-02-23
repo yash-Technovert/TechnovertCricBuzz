@@ -12,7 +12,6 @@ import { FaPlus } from 'react-icons/fa'
 import { createMatch, createTeam, getTeams } from "../api/match";
 
 import { Team } from "../models/Team";
-import MatchReducer, { initialState } from "../contexts/MatchReducer";
 import { useNavigate } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,6 +44,7 @@ const MatchSettings = () => {
   const [teamOnePlaying11, setTeamOnePlaying11] = useState<any>([]);
   const [teamTwoPlaying11, setTeamTwoPlaying11] = useState<any>([]);
   const [matchDetails, setMatchDetails] = useState<any>({})
+
 
   useEffect(() => {
     if (teamOnePlaying11.length === 8 && firstTeamTitle && teamTwoPlaying11.length === 8 && secondTeamTitle) {
@@ -98,7 +98,7 @@ const MatchSettings = () => {
       type: matchConstants.SET_TEAMTWO,
       payload: matchDetails,
     })
-    navigate('/app', { state: { matchId:matchDetails.matchInfo?.matchInfo.matchId } });
+    navigate('/app');
   };
 
   const handleBackButton = () => {
@@ -267,7 +267,7 @@ const MatchSettings = () => {
                   <div className=" d-inline-flex ms-3 me-5">
                     <input
                       type="radio"
-                      value='bat'
+                      value='Batting'
                       id="teamOneTitle"
                       onChange={(e => { setOptedOption(e.target.value); if (firstTeamTitle.length !== 0 || secondTeamTitle.length !== 0) changeProceedDisable(false) })}
                       name="optedOption"

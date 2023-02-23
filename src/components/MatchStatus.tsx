@@ -1,14 +1,18 @@
 import react, { useState, useEffect } from 'react';
 import Card from 'react-bootstrap/Card';
+import { Navigate, useNavigate } from 'react-router';
 type propType = {
   teamName: string[],
   teamOneDetails: number[],
   teamTwoDetails: number[],
   index: number,
-  matchWinner: string
+  matchWinner: string,
+  matchId:string
 }
 
-const MatchStatus = ({ teamName, teamOneDetails, teamTwoDetails, index, matchWinner }: propType) => {
+
+const MatchStatus = ({ teamName, teamOneDetails, teamTwoDetails, index, matchWinner, matchId }: propType) => {
+  const navigate = useNavigate();
   const [matchWinnerStat, setMatchWinnerStat] = useState<string>('')
   useEffect(() => {
     if (teamOneDetails[0] > teamTwoDetails[0]) {
@@ -23,6 +27,11 @@ const MatchStatus = ({ teamName, teamOneDetails, teamTwoDetails, index, matchWin
 
   }, [])
 
+  const handleClick=(e:any)=>{
+    let matchId = e.target.getAttribute('data-bs-matchId');
+    navigate('/', { state: { matchId: matchId } })
+  }
+
   return (
     <Card  >
       <Card.Header className='d-flex'><p className=' fw-bold fs-4 m-auto'>Match {index + 1}</p></Card.Header>
@@ -33,7 +42,7 @@ const MatchStatus = ({ teamName, teamOneDetails, teamTwoDetails, index, matchWin
         <div className='text-capitalize fw-bold' style={{ minHeight: '1.6cm' }}>
           {matchWinner} {matchWinnerStat}
         </div>
-        <div className='d-flex '><button type="button" className="fw-bold btn btn-success m-auto fs-5">View Scorecard</button></div>
+        <div className='d-flex '><button type="button" onClick={handleClick} className="fw-bold btn btn-success m-auto fs-5" data-bs-matchid={matchId}>View Scorecard</button></div>
       </Card.Body>
 
     </Card>

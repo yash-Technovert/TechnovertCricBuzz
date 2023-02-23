@@ -4,19 +4,23 @@ import "../assets/styles/match.css";
 import { finishedMatchStats, ongoingMatchStats } from "../models/MatchStatistics";
 import { Card } from "react-bootstrap";
 import { CiStreamOn } from 'react-icons/ci'
-import { getMatches } from "../api/match";
+import getMatchesAPI from "../action/MatchInfo/getMatches";
 import { useNavigate } from "react-router-dom";
 import MatchReducer, { initialState } from "../contexts/MatchReducer";
+import { useSelector, useDispatch } from "react-redux";
 const MatchView = () => {
-
+  const dispatch = useDispatch<any>();
   const navigate = useNavigate();
-  const [state, dispatch] = useReducer(MatchReducer, initialState);
+  // const [state, dispatch] = useReducer(MatchReducer, initialState);
   const setMatchId = (matchId: any) => {
     dispatch({ type: 'SET_MATCH_ID', payload: { matchId } })
   }
 
   const [liveMatches, setLiveMatches] = useState<ongoingMatchStats[]>([]);
   const [finishedMatches, setFinishedMatches] = useState<finishedMatchStats[]>([]);
+
+  const liveMatchState = useSelector((state: any) => state)
+  //console.log("liveMatchState", liveMatchState);
 
   const handleClick = (e: any) => {
     let matchId = e.target.getAttribute('data-bs-matchId');
@@ -25,57 +29,28 @@ const MatchView = () => {
   };
 
   React.useEffect(() => {
-    getMatches()
-      .then((res: any) => {
-        res.data.map((match: any) => {
-          if (match.matchWinner) {
-            let completedMatch: finishedMatchStats = {
-              matchId: match.matchId,
-              teamOne: match.teamOne,
-              teamTwo: match.teamTwo,
-              teamOneInningStat: {
-                runsScored: match.teamOneRuns,
-                wickets: match.teamOneWickets,
-                oversPlayed: match.teamOneOvers,
-              },
-              teamTwoInningStat: {
-                runsScored: match.teamTwoRuns,
-                wickets: match.teamTwoWickets,
-                oversPlayed: match.teamTwoOvers,
-              },
-              matchWinner: match.matchWinner,
-            };
-            setFinishedMatches((prev) => [...prev, completedMatch]);
-          }
-          else {
-            let liveMatch: ongoingMatchStats = {
-              matchId: match.matchId,
-              teamOne: match.teamOne,
-              teamTwo: match.teamTwo,
-              tossWinner: match.tossWinner,
-              tossDecision: match.tossDecision,
-              teamOneInningStat: {
-                runsScored: match.teamOneRuns,
-                wickets: match.teamOneWickets,
-                oversPlayed: match.teamOneOvers,
-              },
-              teamTwoInningStat: {
-                runsScored: match.teamTwoRuns,
-                wickets: match.teamTwoWickets,
-                oversPlayed: match.teamTwoOvers,
-              }
-            };
-            setLiveMatches((prev) => [...prev, liveMatch]);
-          }
-        })
-      })
+    setLiveMatches(liveMatchState.liveMatchDetails.live);
+    setFinishedMatches(liveMatchState.liveMatchDetails.finished);
+    console.log("liveMatches", liveMatches)
+    console.log("finishedMatches", finishedMatches)
+  }, [liveMatchState]);
+
+
+  React.useEffect(() => {
+    const getData = async () => {
+      console.log("bb");
+      await dispatch(getMatchesAPI());
+
+    }
+    getData();
   }, [])
+
   return (
     <div className="container mt-4 ">
       <div className="row bg-light m-4 rounded p-2 border border-dark">
         <p className="fs-3 fw-bold  mb-0">LIVE <CiStreamOn className="fs-3 text-danger"></CiStreamOn></p>
         <div className="row  pb-3 d-flex">
-          {liveMatches.length === 0 && <p className='col-4 fs-3 m-auto font-dark'>No current live matches.</p>}
+          {liveMatches.length === 0 && <p className='col-4 fs-3 m-auto font-dark'>No finished live matches.</p>}
           {liveMatches.length !== 0 &&
             liveMatches.map((match, index) => {
               return (
@@ -121,6 +96,7 @@ const MatchView = () => {
             return (
               <div className="col mb-3">
                 <MatchStatus
+                  matchId={matchDetails.matchId}
                   teamName={[
                     matchDetails.teamOne,
                     matchDetails.teamTwo,
