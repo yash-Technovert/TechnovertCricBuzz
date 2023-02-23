@@ -28,7 +28,6 @@ const Batsman = (props:any) => {
         disableBowling: false
     }   
     const [playerId, setPlayerId] = useState<any>()
-    const [matchId, setmatchId] = useState<any>()
     const [playerStat, setPlayerStat] = useState<PlayerStat>(data);
     const base = new Supabase();
     const channel = base.supabase

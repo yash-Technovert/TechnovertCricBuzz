@@ -4,7 +4,7 @@ import Bowler from './bowler'
 import CurrentOver from './CurrentOver'
 import { Supabase } from '../api/supabase'
 import { InningStatResponse } from '../models/Innings'
-import { getScores } from '../api/match'
+import { getScore } from '../api/match'
 import { useSelector } from 'react-redux'
 import { useDispatch } from "react-redux";
 import matchConstants from '../constants/matchConstants';

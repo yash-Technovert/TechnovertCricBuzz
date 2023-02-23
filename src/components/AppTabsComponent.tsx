@@ -1,5 +1,4 @@
 import { useState,useEffect } from 'react';
-import { getCurrentInnings, getCurrentMatch, persistInnings, persistMatch } from '../api/matchData';
 import { useAuth } from '../contexts/AuthProvider';
 import MatchComponent from './MatchComponent';
 import ScoringTabComponent from './ScoringTabComponent';
@@ -19,31 +18,6 @@ const AppTabsComponent = () => {
 
     const dispatch = useDispatch<any>();
 
-    const handleEndMatch = () => {
-        handleEndInnings();
-
-        localStorage.removeItem('currentMatch');
-        localStorage.removeItem('currentInnings');
-
-        const newMatch = getCurrentMatch();
-        const newInnings = getCurrentInnings(newMatch.id);
-        setMatch(newMatch);
-        setInnings(newInnings);
-    };
-
-    const handleEndInnings = () => {
-        const matchData = { ...match, innings: { ...match.innings, [innings.id]: innings } };
-        setMatch(matchData);
-        persistMatch(matchData);
-        localStorage.removeItem('currentInnings');
-        localStorage.removeItem('currentOver');
-        localStorage.removeItem('currentBowler');
-        localStorage.removeItem('currentBatsmen');
-
-        const inningData = getCurrentInnings(match.id);
-        persistInnings(inningData);
-        setInnings(inningData);
-    };
     return (
         <div className="bg-white container my-4 p-3 border border-0 rounded-3">
             <Tabs

@@ -68,15 +68,14 @@ export async function getScores(id: string, matchId: string) {
   });
 }
 
-export async function updateScore(id: string, updates: any) {
-  return await axios({
-    method: "put",
-    url: baseUrl + "updatescore",
-    data: {
-      updates: updates,
-      inningId: id,
-    },
-  });
+export async function getScore(matchId:string){
+    return await axios({
+        method: 'get',
+        url: baseUrl+'getscore',
+        params:{
+            matchId:matchId
+        }
+    })
 }
 
 export async function updateScore(id:string,updates:any)
