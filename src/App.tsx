@@ -18,7 +18,7 @@ function App() {
             <AuthProvider>
                 <MatchProvider>
                     <Routes>
-                    <Route path='/' element={<AppTabsComponent />} />
+                    <Route path='/' element={<Login />} />
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/login" element={<Login />} />
                       <Route
