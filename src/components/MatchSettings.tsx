@@ -33,7 +33,6 @@ const MatchSettings = () => {
   const [newTeam, setNewTeam] = useState<string>("");
   const [tossWinner, setTossWinner] = useState("");
   const [optedOption, setOptedOption] = useState("");
-
   const [displaySelectionPanel, changeDisplaySelectionPanel] = useState<boolean>(false);
   const [proceedButtonDisable, changeProceedDisable] = useState<boolean>(true);
   const [startButtonDisable, changeStartDisable] = useState<boolean>(true);
@@ -88,17 +87,24 @@ const MatchSettings = () => {
     e.preventDefault();
     console.log("Bbbb ", matchDetails)
     await dispatch(createMatchAPI(matchDetails))
+    // console.log("matchDetails.teamOnePlaying11",matchDetails.teamOnePlaying11)
+    // console.log("matchDetails.teamTwoPlaying11",matchDetails.teamTwoPlaying11)
 
-    await dispatch({
-      type: matchConstants.SET_TEAMONE,
-      payload: matchDetails,
-    })
+    // await dispatch({
+    //   type: matchConstants.SET_TEAMONE,
+    //   payload: matchDetails,
+    // })
 
     await dispatch({
       type: matchConstants.SET_TEAMTWO,
       payload: matchDetails,
     })
     navigate('/app', { state: { matchId:matchDetails.matchInfo?.matchInfo.matchId } });
+    // await dispatch({
+    //   type: matchConstants.SET_TEAMTWO,
+    //   payload: matchDetails,
+    // })
+    navigate('/app');
   };
 
   const handleBackButton = () => {
@@ -329,6 +335,7 @@ const MatchSettings = () => {
                 <PlayersInput
                   teamId={teamOneId}
                   setTeamPlayers={setTeamOnePlayers}
+                  isTeamOne={true}
                 />
               </div>
               <div
@@ -342,6 +349,7 @@ const MatchSettings = () => {
                 <PlayersInput
                   teamId={teamTwoId}
                   setTeamPlayers={setTeamTwoPlayers}
+                  isTeamOne={false}
                 />
               </div>
             </div>

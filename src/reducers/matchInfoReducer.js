@@ -7,7 +7,7 @@ const initialState = {
     teamOnePlaying11:{},
     teamTwo: {},
     teamTwoPlaying11:{},
-    currentOver: []
+    currentOver: [],
 };
   
   export default function userReducer(state = initialState, action) {
@@ -20,10 +20,26 @@ const initialState = {
                 firstInning:payload.data.firstInning[0]
             }
         case matchConstants.CHANGE_TEAMS:
-            return state;
-        case "SET_FIRSTINNING":
-            state.firstInning = action.payload.firstInning;
-            return state;
+            return {
+                ...state,
+                teamOne:payload.TeamTwoName,
+                teamOnePlaying11:payload.teamTwoPlayers,
+                teamTwo:payload.TeamOneName,
+                teamTwoPlaying11:payload.teamOnePlayers
+            }
+        case matchConstants.TEAM_ONE_API_SUCCESS:
+            const TeamOneStats=payload.data.map(obj => ({ ...obj, runs:0,ballsPlayed:0,four:0,six:0,wickets:0,overs:0, runsConceded:0, maiden:0, disableBatting:0, disableBowling:0}))
+            return {
+                ...state,
+                teamOnePlaying11:TeamOneStats
+            }
+        case matchConstants.TEAM_TWO_API_SUCCESS:
+            const TeamTwoStats=payload.data.map(obj => ({ ...obj, runs:0,ballsPlayed:0,four:0,six:0,wickets:0,overs:0, runsConceded:0, maiden:0, disableBatting:0, disableBowling:0}))
+            return {
+                ...state,
+                teamTwoPlaying11:TeamTwoStats
+            }
+        
         case "SET_SECONDINNING":
             state.secondInning = action.payload.secondInning;
             return state;
