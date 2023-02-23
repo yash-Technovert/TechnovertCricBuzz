@@ -1,32 +1,42 @@
 import React, { useEffect, useState, useReducer } from "react";
 import "../assets/styles/match.css";
 import PlayersInput from "./PlayersInput";
+//icons
 import { GiTennisBall, GiCricketBat } from "react-icons/gi"
 import { BiCoin } from "react-icons/bi"
 import { AiFillSetting } from "react-icons/ai"
 import { BsArrowRightCircleFill } from 'react-icons/bs'
 import { FaPlus } from 'react-icons/fa'
+
+//apis
 import { createMatch, createTeam, getTeams } from "../api/match";
+
 import { Team } from "../models/Team";
 import MatchReducer, { initialState } from "../contexts/MatchReducer";
 import { useNavigate } from "react-router-dom";
 import { Form } from "react-bootstrap";
+import { useDispatch,useSelector } from "react-redux";
 
+//action
+import TeamDetails from "../action/TeamDetails";
+import createMatchAPI from "../action/MatchInfo/createMatch";
+
+import matchConstants from "../constants/matchConstants";
 const MatchSettings = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<any>();
 
-  const [state, dispatch] = useReducer(MatchReducer, initialState)
-
-  const setMatch = (matchInfo: any) => {
-    dispatch({
+  // const [state, dispatch] = useReducer(MatchReducer, initialState)
+  const setMatch = async(matchInfo: any) => {
+    await dispatch({
       type: 'SET_MATCH',
       payload: {
         matchInfo: matchInfo
       }
     })
   }
-  const setFirstInning = (firstInning: any) => {
-    dispatch({
+  const setFirstInning = async(firstInning: any) => {
+    await dispatch({
       type: 'SET_FIRSTINNING',
       payload: {
         firstInning: firstInning
@@ -34,8 +44,8 @@ const MatchSettings = () => {
     })
   }
 
-  const setTeamOne = (teamOne: any) => {
-    dispatch({
+  const setTeamOne = async(teamOne: any) => {
+    await dispatch({
       type: 'SET_TEAMONE',
       payload: {
         teamOne: teamOne
@@ -43,8 +53,8 @@ const MatchSettings = () => {
     })
   }
 
-  const setTeamTwo = (teamTwo: any) => {
-    dispatch({
+  const setTeamTwo = async(teamTwo: any) => {
+    await dispatch({
       type: 'SET_TEAMTWO',
       payload: {
         teamTwo: teamTwo
@@ -78,6 +88,16 @@ const MatchSettings = () => {
     }
   }, [teamOnePlaying11, teamTwoPlaying11, firstTeamTitle, secondTeamTitle]);
 
+  //to get and set up teams
+  useEffect(()=>{
+    const getData = async() =>{
+      await dispatch(TeamDetails()).then((res:any)=>{
+        setTeamList(res.data);
+      });
+    }
+    getData()
+  },[])
+
   const setTeamOnePlayers = (players: any) => {
     let arr: any[] = [...players]
     setTeamOnePlaying11(arr)
@@ -96,22 +116,24 @@ const MatchSettings = () => {
       changeDisplaySelectionPanel(true);
     }
   };
-
-  const startMatch = (e: any) => {
+  
+  const startMatch = async(e: any) => {
     e.preventDefault();
-    console.log(matchDetails)
-    createMatch(matchDetails)
-      .then((res: any) => {
-        if (res.status === 200 && res.data) {
-          setMatch(res.data.matchInfo[0])
-          setFirstInning(res.data.firstInning[0])
-          setTeamOne(matchDetails.teamOnePlaying11)
-          setTeamTwo(matchDetails.teamTwoPlaying11)
-          setInterval(() => {
-            navigate('/app');
-          }, 3000)
-        }
-      })
+    console.log("Bbbb ",matchDetails)
+    await dispatch(createMatchAPI(matchDetails))
+    console.log("matchDetails.teamOnePlaying11",matchDetails.teamOnePlaying11)
+    console.log("matchDetails.teamTwoPlaying11",matchDetails.teamTwoPlaying11)
+
+    await dispatch({
+      type: matchConstants.SET_TEAMONE,
+      payload: matchDetails,
+    })
+
+    await dispatch({
+      type: matchConstants.SET_TEAMTWO,
+      payload: matchDetails,
+    })
+    navigate('/app');
   };
 
   const handleBackButton = () => {
@@ -142,12 +164,12 @@ const MatchSettings = () => {
     }
   }, [teamOnePlaying11, teamTwoPlaying11, firstTeamTitle, secondTeamTitle, tossWinner, optedOption, matchDetails])
 
-  useEffect(() => {
-    getTeams()
-      .then((res: any) => {
-        setTeamList(res.data);
-      })
-  }, []);
+  // useEffect(() => {
+  //   getTeams()
+  //     .then((res: any) => {
+  //       setTeamList(res.data);
+  //     })
+  // }, []);
 
   return (
     <>

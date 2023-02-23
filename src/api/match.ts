@@ -23,11 +23,14 @@ export async function getTeams()
 
 export async function createMatch(matchDetails:any)
 {
-    return await axios({
+    console.log("Match Details form axios",matchDetails)
+    const result = await axios({
         method: 'post',
         url: baseUrl+'creatematch',
         data:{matchDetails}
     })
+    console.log("result from Create Match",result);
+    return result;
 }
 
 export async function getMatches()
@@ -52,7 +55,7 @@ export async function getMatchInfo(id:string){
     return await axios({
         method: 'get',
         url: baseUrl+'getmatchinfo',
-        data:{
+        params:{
             id:id
         }
     })

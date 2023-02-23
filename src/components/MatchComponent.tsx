@@ -17,6 +17,7 @@ const MatchComponent = () => {
     setTeamOne(state.teamOnePlaying11)
     setTeamTwo(state.teamTwoPlaying11)
   }, [state.matchInfo, state.teamOnePlaying11, state.teamTwoPlaying11])
+  console.log("Context State ",state)
   return (
     <div className="match-info">
       {/* <div className="match-details border border-muted border-2 rounded p-2 my-3">

@@ -57,7 +57,7 @@ const PlayersInput = ({ teamId, setTeamPlayers }: PropsType) => {
       console.log('length of selected players is 11')
       setTeamPlayers(selectedPlayers)
     }
-  }, [selectedPlayers, setTeamPlayers])
+  }, [selectedPlayers.length])
   return (
     <>
       <div className="d-flex justify-content-center">
