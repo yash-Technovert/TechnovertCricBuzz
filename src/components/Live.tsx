@@ -147,11 +147,6 @@ const Live = ({ isAdmin, matchId }: PropsType) => {
         getCurrentScore()
     }, [inningId, matchId, isAdmin])
 
-    React.useEffect(() => {
-        if (matchId.length <= 1) {
-            matchId = matchIdFromState
-        }
-    }, [matchId, matchIdFromState])
 
 
     return (

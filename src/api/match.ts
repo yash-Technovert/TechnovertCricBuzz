@@ -30,11 +30,24 @@ export async function createMatch(matchDetails: any) {
   return result;
 }
 
-export async function getMatches() {
-  return await axios({
-    method: "get",
-    url: baseUrl + "getmatches",
-  });
+export async function getPlayerState(matchId:any,inningId:any)
+{
+    return await axios({
+        method: 'get',
+        url: baseUrl+'getplayerstate',
+        params:{
+            id:inningId,
+            matchId:matchId
+        }
+    })
+}
+
+export async function getMatches()
+{
+    return await axios({
+        method: 'get',
+        url: baseUrl+'getmatches',
+    })
 }
 
 export async function getPlayers(teamId: string) {
@@ -47,14 +60,38 @@ export async function getPlayers(teamId: string) {
   });
 }
 
-export async function getMatchInfo(id: string) {
-  return await axios({
-    method: "get",
-    url: baseUrl + "getmatchinfo",
-    params: {
-      id: id,
-    },
-  });
+export async function getMatchInfo(id:string){
+    return await axios({
+        method: 'get',
+        url: baseUrl+'getmatchinfo',
+        params:{
+            matchId:id
+        }
+    })
+}
+
+export async function getFinishedMatches(matchId:string)
+{
+    return await axios({
+        method: 'get',
+        url: baseUrl+'getfinishedmatches',
+        params:{
+            matchId:matchId
+        }
+    })
+}
+
+export async function updatePlayerStat(id:string,matchId:string,updates:object)
+{
+    return await axios({
+        method: 'put',
+        url: baseUrl+'updateplayerstat',
+        data:{
+            updates:updates,
+            inningId:id,
+            matchId:matchId
+        }
+    })
 }
 
 export async function getScores(id: string, matchId: string) {
@@ -90,14 +127,12 @@ export async function updateScore(id:string,updates:any)
     })
 }
 
-export async function updatePlayerStat(id: string, matchId: string, updates: object={}) {
+export async function getSelectedPlayers(matchId:string): Promise<any>{
     return await axios({
-        method: 'put',
-        url: baseUrl+'updatePlayerStat',
-        data:{
-            updates:updates,
-            id:id,
-            matchId: matchId
+        method: 'get',
+        url: baseUrl+'getselectedplayers',
+        params:{
+            matchId:matchId
         }
     })
 }

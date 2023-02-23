@@ -6,10 +6,11 @@ import {
 } from "redux";
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import userReducer from '../reducers/userReducer'
-import matchInfoReducer from '../reducers/matchInfoReducer'
-import teamDetailReducer from '../reducers/teamDetailReducer'
+import userReducer from '../reducers/userReducer';
+import matchInfoReducer from '../reducers/matchInfoReducer';
+import teamDetailReducer from '../reducers/teamDetailReducer';
 import playersInformationReducer from "../reducers/playersInformationReducer";
+import liveMatchesReducer from "../reducers/liveMatchesReducer";
 import thunk from "redux-thunk";
 
 import { createLogger } from 'redux-logger';
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
 user: userReducer,
 matchInfo: matchInfoReducer,
 teamData:teamDetailReducer,
-matchPlayers:playersInformationReducer
+matchPlayers:playersInformationReducer,
+liveMatchDetails:liveMatchesReducer,
 });
 
 const persistConfig = {
