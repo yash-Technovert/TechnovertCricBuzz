@@ -29,7 +29,6 @@ export async function createMatch(matchDetails:any)
         url: baseUrl+'creatematch',
         data:{matchDetails}
     })
-    console.log("result from Create Match",result);
     return result;
 }
 
