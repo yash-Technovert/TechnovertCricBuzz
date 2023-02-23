@@ -32,4 +32,33 @@
   gap: 0.4em;
   margin-right:0.4em;
 }
+.player-list{
+  list-style-type:none;
+}
+.player-list>span{
+  border:1px solid darkblue;
+  color: red;
+  border-radius:50%;
+  padding-bottom: 5px !important;
+  padding-left: 10px;
+  padding-right: 10px;
+  cursor: pointer;
+}
+
+.extras-input{
+  max-width:4rem;
+  border:none;
+  border-bottom:1px solid black !important;
+}
+.extras-input:focus{
+  outline:none;
+  border-bottom:1px solid black !important;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}
 
