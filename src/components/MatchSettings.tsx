@@ -101,8 +101,8 @@ const MatchSettings = () => {
   const setTeamOnePlayers = (players: any) => {
     let arr: any[] = [...players]
     setTeamOnePlaying11(arr)
-
   }
+  
   const setTeamTwoPlayers = (players: any) => {
     let arr: any[] = [...players]
     setTeamTwoPlaying11(arr)

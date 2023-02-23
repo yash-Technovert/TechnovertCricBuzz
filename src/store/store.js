@@ -9,6 +9,7 @@ import storage from 'redux-persist/lib/storage';
 import userReducer from '../reducers/userReducer'
 import matchInfoReducer from '../reducers/matchInfoReducer'
 import teamDetailReducer from '../reducers/teamDetailReducer'
+import playersInformationReducer from "../reducers/playersInformationReducer";
 import thunk from "redux-thunk";
 
 import { createLogger } from 'redux-logger';
@@ -17,7 +18,8 @@ import { createLogger } from 'redux-logger';
 const rootReducer = combineReducers({
 user: userReducer,
 matchInfo: matchInfoReducer,
-teamData:teamDetailReducer
+teamData:teamDetailReducer,
+matchPlayers:playersInformationReducer
 });
 
 const persistConfig = {
