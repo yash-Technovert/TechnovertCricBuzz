@@ -15,7 +15,7 @@ import { Team } from "../models/Team";
 import MatchReducer, { initialState } from "../contexts/MatchReducer";
 import { useNavigate } from "react-router-dom";
 import { Form } from "react-bootstrap";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 //action
 import TeamDetails from "../action/TeamDetails";
@@ -25,42 +25,6 @@ import matchConstants from "../constants/matchConstants";
 const MatchSettings = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<any>();
-
-  // const [state, dispatch] = useReducer(MatchReducer, initialState)
-  const setMatch = async(matchInfo: any) => {
-    await dispatch({
-      type: 'SET_MATCH',
-      payload: {
-        matchInfo: matchInfo
-      }
-    })
-  }
-  const setFirstInning = async(firstInning: any) => {
-    await dispatch({
-      type: 'SET_FIRSTINNING',
-      payload: {
-        firstInning: firstInning
-      }
-    })
-  }
-
-  const setTeamOne = async(teamOne: any) => {
-    await dispatch({
-      type: 'SET_TEAMONE',
-      payload: {
-        teamOne: teamOne
-      }
-    })
-  }
-
-  const setTeamTwo = async(teamTwo: any) => {
-    await dispatch({
-      type: 'SET_TEAMTWO',
-      payload: {
-        teamTwo: teamTwo
-      }
-    })
-  }
 
   const [firstTeamTitle, changeFirstTeamTitle] = useState<any>('');
   const [secondTeamTitle, changeSecondTeamTitle] = useState<any>('');
@@ -86,26 +50,26 @@ const MatchSettings = () => {
     if (teamOnePlaying11.length === 8 && firstTeamTitle && teamTwoPlaying11.length === 8 && secondTeamTitle) {
       changeStartDisable(false)
     }
-    else{
+    else {
       changeStartDisable(true)
     }
   }, [teamOnePlaying11, teamTwoPlaying11, firstTeamTitle, secondTeamTitle]);
 
   //to get and set up teams
-  useEffect(()=>{
-    const getData = async() =>{
-      await dispatch(TeamDetails()).then((res:any)=>{
+  useEffect(() => {
+    const getData = async () => {
+      await dispatch(TeamDetails()).then((res: any) => {
         setTeamList(res.data);
       });
     }
     getData()
-  },[])
+  }, [])
 
   const setTeamOnePlayers = (players: any) => {
     let arr: any[] = [...players]
     setTeamOnePlaying11(arr)
   }
-  
+
   const setTeamTwoPlayers = (players: any) => {
     let arr: any[] = [...players]
     setTeamTwoPlaying11(arr)
@@ -119,13 +83,13 @@ const MatchSettings = () => {
       changeDisplaySelectionPanel(true);
     }
   };
-  
-  const startMatch = async(e: any) => {
+
+  const startMatch = async (e: any) => {
     e.preventDefault();
-    console.log("Bbbb ",matchDetails)
+    console.log("Bbbb ", matchDetails)
     await dispatch(createMatchAPI(matchDetails))
-    console.log("matchDetails.teamOnePlaying11",matchDetails.teamOnePlaying11)
-    console.log("matchDetails.teamTwoPlaying11",matchDetails.teamTwoPlaying11)
+    console.log("matchDetails.teamOnePlaying11", matchDetails.teamOnePlaying11)
+    console.log("matchDetails.teamTwoPlaying11", matchDetails.teamTwoPlaying11)
 
     await dispatch({
       type: matchConstants.SET_TEAMONE,
@@ -136,7 +100,7 @@ const MatchSettings = () => {
       type: matchConstants.SET_TEAMTWO,
       payload: matchDetails,
     })
-    navigate('/app');
+    navigate('/app', { state: { matchId:matchDetails.matchInfo?.matchInfo.matchId } });
   };
 
   const handleBackButton = () => {
@@ -167,12 +131,6 @@ const MatchSettings = () => {
     }
   }, [teamOnePlaying11, teamTwoPlaying11, firstTeamTitle, secondTeamTitle, tossWinner, optedOption, matchDetails])
 
-  // useEffect(() => {
-  //   getTeams()
-  //     .then((res: any) => {
-  //       setTeamList(res.data);
-  //     })
-  // }, []);
 
   return (
     <>

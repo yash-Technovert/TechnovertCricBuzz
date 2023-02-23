@@ -7,7 +7,7 @@ import { Tabs, Tab } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 
 const AppTabsComponent = () => {
-    const [isAdmin, setIsAdmin] = useState(true);
+    const [isAdmin, setIsAdmin] = useState<any>(true);
     const { onLogout } = useAuth();
     const [activeTab, setActiveTab] = useState('Scoring');
     const { state } = useLocation();
