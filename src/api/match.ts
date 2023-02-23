@@ -120,18 +120,6 @@ export async function updateScore(id:string,updates:any)
     })
 }
 
-export async function updatePlayerStat(id: string, matchId: string, updates: object={}) {
-    return await axios({
-        method: 'put',
-        url: baseUrl+'updatePlayerStat',
-        data:{
-            updates:updates,
-            id:id,
-            matchId: matchId
-        }
-    })
-}
-
 export async function getSelectedPlayers(matchId:string): Promise<any>{
     return await axios({
         method: 'get',
