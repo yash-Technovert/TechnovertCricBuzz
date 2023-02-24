@@ -136,10 +136,10 @@ const Batsman = (props:any) => {
                                     <option>--select--</option>
                                     {
                                         props.teamOnePlayers?
-                                        props.teamOnePlayers.map((batsman1:any)=>{
-                                            return <option value={batsman1.id}>{batsman1.name}</option>
-                                        }):props.teamOnePlaying11.map((batsman1:any)=>{
-                                            return <option value={batsman1.id}>{batsman1.name}</option>
+                                        props.teamOnePlayers?.map((batsman1:any, index:any )=>{
+                                            return <option key={index} value={batsman1.id}>{batsman1.name}</option>
+                                        }):props.teamOnePlaying11?.map((batsman1:any, index: any)=>{
+                                            return <option key={index} value={batsman1.id}>{batsman1.name}</option>
                                         })
                                     }
                                 </Form.Select>
@@ -190,10 +190,10 @@ const Batsman = (props:any) => {
                                     <option>--select--</option>
                                     {
                                         props.teamOnePlayers?
-                                        props.teamOnePlayers.map((batsman2:any)=>{
-                                            return <option value={batsman2.id}>{batsman2.name}</option>
-                                        }):props.teamOnePlaying11.map((batsman2:any)=>{
-                                            return <option value={batsman2.id}>{batsman2.name}</option>
+                                        props.teamOnePlayers?.map((batsman2:any, index:any)=>{
+                                            return <option key={index} value={batsman2.id}>{batsman2.name}</option>
+                                        }):props.teamOnePlaying11?.map((batsman2:any, index:any )=>{
+                                            return <option key={index} value={batsman2.id}>{batsman2.name}</option>
                                         })
                                     }
                                 </Form.Select>

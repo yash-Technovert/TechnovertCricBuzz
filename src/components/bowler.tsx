@@ -46,10 +46,10 @@ const Bowler = (props) => {
                                     <option>--select--</option>
                                     {
                                         props.teamTwoPlayers?
-                                        props.teamTwoPlayers.map((bolwer:any)=>{
-                                            return <option value={bolwer.id}>{bolwer.name}</option>
-                                        }):props.teamOnePlaying11.map((bolwer:any)=>{
-                                            return <option value={bolwer.id}>{bolwer.name}</option>
+                                        props.teamTwoPlayers?.map((bolwer:any, index: any)=>{
+                                            return <option key={index} value={bolwer.id}>{bolwer.name}</option>
+                                        }):props.teamOnePlaying11?.map((bolwer:any, index:any)=>{
+                                            return <option key={index} value={bolwer.id}>{bolwer.name}</option>
                                         })
                                     }
                                 </Form.Select>
