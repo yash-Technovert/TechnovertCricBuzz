@@ -8,6 +8,7 @@ const initialState = {
     teamTwo: {},
     teamTwoPlaying11:{},
     currentOver: [],
+    fairBallsCount: 0
 };
   
   export default function userReducer(state = initialState, action) {
@@ -53,11 +54,20 @@ const initialState = {
             return {
                 ...state,
                 teamTwo:payload.teamTwo,
-                teamTwoPlaying11:payload.teamTwoPlayers
+                teamTwoPlaying11:payload.teamTwoPlayers,
+                currentOver: [],
+                 fairBallsCount: 0
             }
-        case "UPDATE_CURRENT_OVER":
-            state.currentOver = action.payload.currentOver;
-            return state;
+        case matchConstants.UPDATE_CURRENT_OVER:
+            console.log("from reducer update",state);
+            var currentOverData  = state.fairBallsCount>6 ? [] :  payload.currentOver
+            var fairDeliveryCount = state.fairBallsCount>6 ? 0 :  payload.fairBallsCount
+            console.log("from reducer check variables",currentOverData, fairDeliveryCount);
+            return {
+                ...state,
+                currentOver: currentOverData,
+                 fairBallsCount: fairDeliveryCount
+            }
         default:
             return state
     }
