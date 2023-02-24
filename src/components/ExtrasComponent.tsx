@@ -38,11 +38,11 @@ const ExtrasComponent = () => {
   return (
     <div className="extra">
       <div className="d-flex extra-types">
-        {extras.map((extra) => {
+        {extras?.map((extra,index) => {
           return (
             <OverlayTrigger
               trigger="click"
-              key={'top'}
+              key={index}
               placement={'top'}
               overlay={
                 <Popover id={'top'} className="py-4">
@@ -56,7 +56,7 @@ const ExtrasComponent = () => {
                 </Popover>
               }
             >
-              <Button className="btn btn-primary btn-sm m-1 py-3 px-5 fw-bold fs-6" onClick={handleExtra}>{extra}</Button>
+              <Button className="btn btn-primary btn-sm m-1 py-3 px-5 fw-bold fs-6" key={index} onClick={handleExtra}>{extra}</Button>
             </OverlayTrigger>
           );
         })}

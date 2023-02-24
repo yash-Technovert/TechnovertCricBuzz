@@ -98,7 +98,7 @@ const Live = ({ isAdmin, matchId }: PropsType) => {
     }, [inningId, matchId, isAdmin])
 
     React.useEffect(() => {
-        if (matchId.length <= 1) {
+        if (matchId?.length <= 1) {
             matchId = matchIdFromState
         }
     }, [matchId, matchIdFromState])
