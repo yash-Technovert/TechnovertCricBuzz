@@ -114,9 +114,6 @@ const Live = ({ isAdmin, matchId }: PropsType) => {
                 }
                 setData()
             }).subscribe();
-    console.log("batsManOne",batsManOne)
-    console.log("batsManTwo",batsManTwo)
-    console.log("Team 2",teamTwoPlaying11)
 
     const currentRunRate = (runsScored: any, oversPlayed: any) => {
         let balls = Math.floor(oversPlayed) * 6

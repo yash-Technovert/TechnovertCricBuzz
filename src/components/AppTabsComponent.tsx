@@ -10,7 +10,7 @@ import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import getPlayersStats from '../action/MatchInfo/getPlayingPlayersStats';
 const AppTabsComponent = () => {
-    const [isAdmin, setIsAdmin] = useState<any>(false);
+    const [isAdmin, setIsAdmin] = useState<any>(true);
     const { onLogout } = useAuth();
     const [activeTab, setActiveTab] = useState('Scoring');
     const { state } = useLocation();

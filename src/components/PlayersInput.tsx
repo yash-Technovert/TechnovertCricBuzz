@@ -8,13 +8,13 @@ import getPlayersDetails from "../action/MatchInfo/playersDetails";
 type PropsType = {
   teamId: string,
   setTeamPlayers: any,
-  isTeamOne:any
+  isTeamOne: any
 }
 interface SelectedPlayer {
   id: string,
   name: string
 }
-const PlayersInput = ({ teamId, setTeamPlayers,isTeamOne }: PropsType) => {
+const PlayersInput = ({ teamId, setTeamPlayers, isTeamOne }: PropsType) => {
 
   const [list, setList] = useState<Player[]>([]);
   const [selectedPlayers, setSelectedPlayers] = useState<any[]>([]);
@@ -36,28 +36,21 @@ const PlayersInput = ({ teamId, setTeamPlayers,isTeamOne }: PropsType) => {
   }
 
   const handleRemove = useCallback(() => {
-      setSelectedPlayers(selectedPlayers.filter((player) => player.id !== removeId))
-      setRemoveId('')
-      let checkBox = document.getElementById(removeId) as HTMLInputElement
-      checkBox.checked = false
-    }, [removeId, selectedPlayers])
+    setSelectedPlayers(selectedPlayers.filter((player) => player.id !== removeId))
+    setRemoveId('')
+    let checkBox = document.getElementById(removeId) as HTMLInputElement
+    checkBox.checked = false
+  }, [removeId, selectedPlayers])
 
-  // useEffect(() => {
-  //   getPlayers(teamId)
-  //     .then((res) => {
-  //       setList(res.data)
-  //     })
-  // }, [teamId])
 
-  useEffect(()=>{
-    const getData = async() =>{
-      await dispatch(getPlayersDetails(teamId,isTeamOne)).then((res:any)=>{
-        // console.log("Players ",res.data)
+  useEffect(() => {
+    const getData = async () => {
+      await dispatch(getPlayersDetails(teamId, isTeamOne)).then((res: any) => {
         setList(res.data);
       });
     }
     getData()
-  },[])
+  }, [])
   useEffect(() => {
     if (removeId) {
       handleRemove()
@@ -74,7 +67,7 @@ const PlayersInput = ({ teamId, setTeamPlayers,isTeamOne }: PropsType) => {
       <div className="d-flex justify-content-center">
         <div className="">
           <Dropdown>
-            <Dropdown.Toggle variant="primary" id="select-players" className="bg-info-subtle text-white px-5">
+            <Dropdown.Toggle variant="primary" id={teamId} className="bg-info-subtle text-white px-5">
               Select Players
             </Dropdown.Toggle>
 
