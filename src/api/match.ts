@@ -21,13 +21,16 @@ export async function getTeams()
     })
 }
 
-export async function createMatch(details:CreateMatch)
+export async function createMatch(matchDetails:any)
 {
-    return await axios({
+    console.log("Match Details form axios",matchDetails)
+    const result = await axios({
         method: 'post',
         url: baseUrl+'creatematch',
-        data:{details}
+        data:{matchDetails}
     })
+    console.log("result from Create Match",result);
+    return result;
 }
 
 export async function getMatches()
@@ -42,8 +45,8 @@ export async function getPlayers(teamId:string){
     return await axios({
         method: 'get',
         url: baseUrl+'getplayers',
-        data:{
-            teamId:teamId
+        params: {
+            teamId: teamId
         }
     })
 }
@@ -52,7 +55,7 @@ export async function getMatchInfo(id:string){
     return await axios({
         method: 'get',
         url: baseUrl+'getmatchinfo',
-        data:{
+        params:{
             id:id
         }
     })
@@ -60,12 +63,11 @@ export async function getMatchInfo(id:string){
 
 
 
-export async function getScores(id:string,matchId:string){
+export async function getScore(matchId:string){
     return await axios({
         method: 'get',
         url: baseUrl+'getscore',
-        data:{
-            id:id,
+        params:{
             matchId:matchId
         }
     })

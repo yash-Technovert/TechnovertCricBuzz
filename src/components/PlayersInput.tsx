@@ -1,324 +1,109 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { getPlayers } from "../api/match";
 import '../assets/styles/match.css'
-type propsType = {
-  teamPlayers: string[];
-  playing11: (arg: string[]) => void
-};
-const PlayersInput = ({ teamPlayers, playing11 }: propsType) => {
-  const [player1, setPlayer1] = useState<string>("");
-  const [player2, setPlayer2] = useState<string>("");
-  const [player3, setPlayer3] = useState<string>("");
-  const [player4, setPlayer4] = useState<string>("");
-  const [player5, setPlayer5] = useState<string>("");
-  const [player6, setPlayer6] = useState<string>("");
-  const [player7, setPlayer7] = useState<string>("");
-  const [player8, setPlayer8] = useState<string>("");
-  const [player9, setPlayer9] = useState<string>("");
-  const [player10, setPlayer10] = useState<string>("");
-  const [player11, setPlayer11] = useState<string>("");
-  const list = [
-    player1,
-    player2,
-    player3,
-    player4,
-    player5,
-    player6,
-    player7,
-    player8,
-    player9,
-    player10,
-    player11
-  ];
-  useEffect(() => { playing11(list) }, [player1, player2, player3, player4, player5, player6, player7, player8, player9, player10, player11])
+import { Player } from "../models/Player";
+import { Dropdown } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import getPlayersDetails from "../action/MatchInfo/playersDetails";
+type PropsType = {
+  teamId: string,
+  setTeamPlayers: any
+}
+interface SelectedPlayer {
+  id: string,
+  name: string
+}
+const PlayersInput = ({ teamId, setTeamPlayers }: PropsType) => {
 
-  const handleOption = (x: string) => {
-    if (x === '') return <option value='' disabled>Select Player</option>
-    else return <option>Change Player</option>
+  const [list, setList] = useState<Player[]>([]);
+  const [selectedPlayers, setSelectedPlayers] = useState<any[]>([]);
+  const [removeId, setRemoveId] = useState<string>('');
+  const dispatch = useDispatch<any>();
+
+  const handleChange = (e: any) => {
+    const { value, checked } = e.target;
+    let player = list.find((player) => player.id === value)
+    let playerObj: SelectedPlayer = {
+      id: player?.id || '',
+      name: player?.name || ''
+    }
+    if (checked && !selectedPlayers.find((player) => player.id === value)) {
+      setSelectedPlayers([...selectedPlayers, playerObj])
+    } else {
+      setSelectedPlayers(selectedPlayers.filter((player) => player.id !== value))
+    }
   }
-  const optionList = teamPlayers.filter((player) => !list.includes(player));
 
+  const handleRemove = useCallback(() => {
+      setSelectedPlayers(selectedPlayers.filter((player) => player.id !== removeId))
+      setRemoveId('')
+      let checkBox = document.getElementById(removeId) as HTMLInputElement
+      checkBox.checked = false
+    }, [removeId, selectedPlayers])
 
+  // useEffect(() => {
+  //   getPlayers(teamId)
+  //     .then((res) => {
+  //       setList(res.data)
+  //     })
+  // }, [teamId])
 
+  useEffect(()=>{
+    const getData = async() =>{
+      await dispatch(getPlayersDetails(teamId)).then((res:any)=>{
+        // console.log("Players ",res.data)
+        setList(res.data);
+      });
+    }
+    getData()
+  },[])
+  useEffect(() => {
+    if (removeId) {
+      handleRemove()
+    }
+  }, [removeId, handleRemove])
+
+  useEffect(() => {
+    if (selectedPlayers.length === 8) {
+      setTeamPlayers(selectedPlayers)
+    }
+  }, [selectedPlayers.length])
   return (
-    < div className="d-flex justify-content-center flex-column">
-      <div className="d-inline-flex mb-3">
-        <input
-          placeholder="Player 1"
-          value={player1}
-          onChange={(e) => setPlayer1(e.target.value)}
-          className="playerInput text-capitalize me-2 ps-3 rounded-start "
-          readOnly
-        />
-        {
-          <select
-            className="dropdownList text-capitalize ps-2 rounded-end"
-            value={player1}
-            onChange={(e) => {
-              setPlayer1(e.target.value);
-            }}
-          >
+    <>
+      <div className="d-flex justify-content-center">
+        <div className="">
+          <Dropdown>
+            <Dropdown.Toggle variant="primary" id="select-players" className="bg-info-subtle text-white px-5">
+              Select Players
+            </Dropdown.Toggle>
 
-            {handleOption(player1)}
-            {optionList.map((player) => (
-              <option key={player} value={player} className="p-4 fs-5 " >
-                {player}
-              </option>
-            ))}
-          </select>
-        }
+            <Dropdown.Menu>
+              {list.map((player, index) => {
+                return (
+                  <div className="d-flex p-2" key={index}>
+                    <input type="checkbox" name="player" id={player.id} value={player.id} onChange={handleChange} className='select-player px-2 py-1 fs-4' />
+                    <label htmlFor="player" className="fs-5 fw-bold px-2 py-1">{player.name}</label>
+                  </div>
+                )
+              })}
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
       </div>
-      <div className="d-inline-flex mb-3">
-        <input
-          placeholder="Player 2"
-          value={player2}
-          onChange={(e) => setPlayer2(e.target.value)}
-          className="playerInput text-capitalize me-2 ps-3 rounded-start "
-          readOnly
-        />
-        {
-          <select
-            className="dropdownList text-capitalize ps-2 rounded-end"
-            value={player2}
-            onChange={(e) => {
-              setPlayer2(e.target.value);
-            }}
-          >
-            {handleOption(player2)}
-            {optionList.map((player) => (
-              <option key={player} value={player} className="p-4 fs-5 ">
-                {player}
-              </option>
-            ))}
-          </select>
-        }
+      <div className="d-flex justify-content-center">
+        <ul>
+          {selectedPlayers.map((player, index) => {
+            return (
+              <li key={index} className="d-flex player-list bg-white fs-4 fw-bold my-2" >
+                <span className="mx-2" onClick={() => setRemoveId(player.id)}>x</span>
+                {player.name}
+              </li>
+            )
+          })}
+        </ul>
       </div>
-      <div className="d-inline-flex mb-3">
-        <input
-          placeholder="Player 3"
-          value={player3}
-          onChange={(e) => setPlayer3(e.target.value)}
-          className="playerInput text-capitalize me-2 ps-3 rounded-start "
-          readOnly
-        />
-        {
-          <select
-            className="dropdownList text-capitalize ps-2 rounded-end"
-            value={player3}
-            onChange={(e) => {
-              setPlayer3(e.target.value);
-            }}
-          >
-            {handleOption(player3)}
-            {optionList.map((player) => (
-              <option key={player} value={player} className="p-4 fs-5 ">
-                {player}
-              </option>
-            ))}
-          </select>
-        }
-      </div>
-      <div className="d-inline-flex mb-3">
-        <input
-          placeholder="Player 4"
-          value={player4}
-          onChange={(e) => setPlayer4(e.target.value)}
-          className="playerInput text-capitalize me-2 ps-3 rounded-start "
-          readOnly
-        />
-        {
-          <select
-            className="dropdownList text-capitalize ps-2 rounded-end"
-            value={player4}
-            onChange={(e) => {
-              setPlayer4(e.target.value);
-            }}
-          >
-            {handleOption(player4)}
-            {optionList.map((player) => (
-              <option key={player} value={player} className="p-4 fs-5 ">
-                {player}
-              </option>
-            ))}
-          </select>
-        }
-      </div>
-      <div className="d-inline-flex mb-3">
-        <input
-          placeholder="Player 5"
-          value={player5}
-          onChange={(e) => setPlayer5(e.target.value)}
-          className="playerInput text-capitalize me-2 ps-3 rounded-start "
-          readOnly
-        />
-        {
-          <select
-            className="dropdownList text-capitalize ps-2 rounded-end"
-            value={player5}
-            onChange={(e) => {
-              setPlayer5(e.target.value);
-            }}
-          >
-            {handleOption(player5)}
-            {optionList.map((player) => (
-              <option key={player} value={player} className="p-4 fs-5 ">
-                {player}
-              </option>
-            ))}
-          </select>
-        }
-      </div>
-      <div className="d-inline-flex mb-3">
-        <input
-          placeholder="Player 6"
-          value={player6}
-          onChange={(e) => setPlayer6(e.target.value)}
-          className="playerInput text-capitalize me-2 ps-3 rounded-start "
-          readOnly
-        />
-        {
-          <select
-            className="dropdownList text-capitalize ps-2 rounded-end"
-            value={player6}
-            onChange={(e) => {
-              setPlayer6(e.target.value);
-            }}
-          >
-            {handleOption(player6)}
-            {optionList.map((player) => (
-              <option key={player} value={player} className="p-4 fs-5 ">
-                {player}
-              </option>
-            ))}
-          </select>
-        }
-      </div>
-      <div className="d-inline-flex mb-3">
-        <input
-          placeholder="Player 7"
-          value={player7}
-          onChange={(e) => setPlayer7(e.target.value)}
-          className="playerInput text-capitalize me-2 ps-3 rounded-start "
-          readOnly
-        />
-        {
-          <select
-            className="dropdownList text-capitalize ps-2 rounded-end"
-            value={player7}
-            onChange={(e) => {
-              setPlayer7(e.target.value);
-            }}
-          >
-            {handleOption(player7)}
-            {optionList.map((player) => (
-              <option key={player} value={player} className="p-4 fs-5 ">
-                {player}
-              </option>
-            ))}
-          </select>
-        }
-      </div>
-      <div className="d-inline-flex mb-3">
-        <input
-          placeholder="Player 8"
-          value={player8}
-          onChange={(e) => setPlayer8(e.target.value)}
-          className="playerInput text-capitalize me-2 ps-3 rounded-start "
-          readOnly
-        />
-        {
-          <select
-            className="dropdownList text-capitalize ps-2 rounded-end"
-            value={player8}
-            onChange={(e) => {
-              setPlayer8(e.target.value);
-            }}
-          >
-            {handleOption(player8)}
-            {optionList.map((player) => (
-              <option key={player} value={player} className="p-4 fs-5 ">
-                {player}
-              </option>
-            ))}
-          </select>
-        }
-      </div>
-      <div className="d-inline-flex mb-3">
-        <input
-          placeholder="Player 9"
-          value={player9}
-          onChange={(e) => setPlayer9(e.target.value)}
-          className="playerInput text-capitalize me-2 ps-3 rounded-start "
-          readOnly
-        />
-        {
-          <select
-            className="dropdownList text-capitalize ps-2 rounded-end"
-            value={player9}
-            onChange={(e) => {
-              setPlayer9(e.target.value);
-            }}
-          >
-            {handleOption(player9)}
-            {optionList.map((player) => (
-              <option key={player} value={player} className="p-4 fs-5 ">
-                {player}
-              </option>
-            ))}
-          </select>
-        }
-      </div>
-      <div className="d-inline-flex mb-3">
-        <input
-          placeholder="Player 10"
-          value={player10}
-          onChange={(e) => setPlayer10(e.target.value)}
-          className="playerInput text-capitalize me-2 ps-3 rounded-start "
-          readOnly
-        />
-        {
-          <select
-            className="dropdownList text-capitalize ps-2 rounded-end"
-            value={player10}
-            onChange={(e) => {
-              setPlayer10(e.target.value);
-            }}
-          >
-            {handleOption(player10)}
-            {optionList.map((player) => (
-              <option key={player} value={player} className="p-4 fs-5 ">
-                {player}
-              </option>
-            ))}
-          </select>
-        }
-      </div>
-      <div className="d-inline-flex mb-3">
-        <input
-          placeholder="Player 11"
-          value={player11}
-          onChange={(e) => setPlayer11(e.target.value)}
-          className="playerInput text-capitalize me-2 ps-3 rounded-start "
-          readOnly
-        />
-        {
-          <select
-            className="dropdownList text-capitalize ps-2 rounded-end"
-            value={player11}
-            onChange={(e) => {
-              setPlayer11(e.target.value);
-            }}
-          >
-            {handleOption(player11)}
-            {optionList.map((player) => (
-              <option key={player} value={player} className="p-4 fs-5 ">
-                {player}
-              </option>
-            ))}
-          </select>
-        }
-      </div>
-    </div>
-  );
+    </>
+  )
 };
 
 export default PlayersInput;

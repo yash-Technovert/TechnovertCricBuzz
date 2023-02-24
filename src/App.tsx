@@ -19,19 +19,19 @@ function App() {
             <AuthProvider>
                 <MatchProvider>
                     <Routes>
-                    <Route path='/' element={<Login />} />
+                    <Route path='/' element={<AppTabsComponent />} />
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/login" element={<Login />} />
                       <Route
                           path="/matchsettings"
                           element={
-                              <ProtectedRoute>
+                            //   <ProtectedRoute>
                                   <MatchSettings key="1"/>
-                              </ProtectedRoute>
+                              /* </ProtectedRoute> */
                           }
                       />
                       <Route
-                        path='/matchview'
+                        path='/matches'
                         element={
                             <MatchView key='2'/>
                         }
@@ -40,9 +40,13 @@ function App() {
                     <Route
                         path="/app"
                         element={
-                            <ProtectedRoute>
                                 <AppTabsComponent />
-                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/bidyut?id"
+                        element={
+                                <AppTabsComponent />
                         }
                     />
                     </Routes>

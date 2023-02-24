@@ -1,16 +1,14 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { Dropdown, Form, Table } from 'react-bootstrap';
+import {Form, Table } from 'react-bootstrap';
 import './../assets/styles/match.css'
 
 // @ts-ignore
 const Batsman = (props) => {
-  const FIRST_BATSMAN = 1;
-  const SECOND_BATSMAN = 2;
-  const [batsman1, setBatsman1] = useState('');
-  const [batsman2, setBatsman2] = useState('');
-
-
+    const [Partnetship, setPartnership] = useState(0)
+    const [Batsman1, setBatsman1] = useState(0)
+    const [Batsman2, setBatsman2] = useState(0)
+    const [onStrike, setOnStrike] = useState(0)
   return (
     <>
     <div className="batsman my-3">
@@ -28,12 +26,16 @@ const Batsman = (props) => {
             <tbody>
                 <tr>
                     <td className='ps-3 pe-5 py-3 col-6'>
-                        <Form.Select aria-label="Default select example">
-                            <option >Batsman</option>
-                            <option value="1">Batsman</option>
-                            <option value="2">Batsman</option>
-                            <option value="3">Batsman</option>
-                        </Form.Select>
+                        {props.isAdmin ?
+                            <Form.Select aria-label="Default select example">
+                                <option>Batsman</option>
+                                <option value="1">Batsman</option>
+                                <option value="2">Batsman</option>
+                                <option value="3">Batsman</option>
+                            </Form.Select>
+                            :
+                            <p className='mt-2 mb-0'>Batsman</p>
+                        }
                     </td>
                     <td><p className='mt-3'>40</p></td>
                     <td><p className='mt-3'>36</p></td>
@@ -43,12 +45,16 @@ const Batsman = (props) => {
                 </tr>
                 <tr className='py-5'>
                     <td className='ps-3 pe-5 py-3 col-6'>
-                        <Form.Select aria-label="Default select example">
-                            <option>Batsman</option>
-                            <option value="1">Batsman</option>
-                            <option value="2">Batsman</option>
-                            <option value="3">Batsman</option>
-                        </Form.Select>
+                        {props.isAdmin ? 
+                            <Form.Select aria-label="Default select example">
+                                <option>Batsman</option>
+                                <option value="1">Batsman</option>
+                                <option value="2">Batsman</option>
+                                <option value="3">Batsman</option>
+                            </Form.Select>
+                            :
+                            <p className='mt-2 mb-0'>Batsman</p>
+                        }
                     </td>
                     <td><p className='mt-3'>40</p></td>
                     <td><p className='mt-3'>36</p></td>

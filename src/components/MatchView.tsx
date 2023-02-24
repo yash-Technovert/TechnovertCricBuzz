@@ -1,206 +1,110 @@
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import MatchStatus from "./MatchStatus";
 import "../assets/styles/match.css";
-import { finishedMatchStats } from "../models/MatchStatistics";
+import { finishedMatchStats, ongoingMatchStats } from "../models/MatchStatistics";
 import { Card } from "react-bootstrap";
-import {CiStreamOn} from 'react-icons/ci'
+import { CiStreamOn } from 'react-icons/ci'
+import { getMatches } from "../api/match";
+import { useNavigate } from "react-router-dom";
+import MatchReducer, { initialState } from "../contexts/MatchReducer";
 const MatchView = () => {
-  const [liveMatches, changeLiveMatches] = useState<any[]>([
-  {
-    teamOne:"Technoverts Daaru",
-    teamTwo:"Technoverts super kings",
-    tossWinner:"Technoverts Daaru",
-    tossDecision:"Bat",
-    teamOneRuns:123,
-    teamOneWickets:2,
-    teamOneCurr:9.7,
-    teamOneOverPlayed:8.0,
-    teamTwoRuns:101,
-    teamTwoWickets:4,
-    teamTwoCurr:8.7,
-    teamTwoOverPlayed:9.0,
-  },
-  {
-    teamOne:"Technoverts kings",
-    teamTwo:"Team legends",
-    tossWinner:"Technoverts kings",
-    tossDecision:"Bowl",
-    teamOneRuns:89,
-    teamOneWickets:7,
-    teamOneCurr:5.7,
-    teamOneOverPlayed:9.0,
-    teamTwoRuns:0,
-    teamTwoWickets:4,
-    teamTwoCurr:7.7,
-    teamTwoOverPlayed:6.0,
+
+  const navigate = useNavigate();
+  const [state, dispatch] = useReducer(MatchReducer, initialState);
+  const setMatchId = (matchId: any) => {
+    dispatch({ type: 'SET_MATCH_ID', payload: { matchId } })
   }
-  ]);
-  const [finishedMatches, changeFinishedMatches] = useState<
-    finishedMatchStats[]
-  >([
-    {
-      id: "1",
-      teamOneInningStat: {
-        teamName: "abc",
-        runsScored: 100,
-        wickets: 2,
-        oversPlayed: 10,
-        isFirstInning: true,
-        extras: {
-          wide: 0,
-          noBall: 1,
-          bye: 0,
-          legBye: 0,
-        },
-      },
-      teamTwoInningStat: {
-        teamName: "xyz",
-        runsScored: 120,
-        wickets: 4,
-        oversPlayed: 12,
-        isFirstInning: false,
-        extras: {
-          wide: 0,
-          noBall: 1,
-          bye: 0,
-          legBye: 0,
-        },
-      },
-      tossWinner: "abc team",
-      matchWinner: "xyz team",
-      matchTime: "12:00:00",
-    },
-    {
-      id: "4",
-      teamOneInningStat: {
-        teamName: "Technovert super kings",
-        runsScored: 140,
-        wickets: 6,
-        oversPlayed: 8,
-        isFirstInning: true,
-        extras: {
-          wide: 0,
-          noBall: 1,
-          bye: 0,
-          legBye: 0,
-        },
-      },
-      teamTwoInningStat: {
-        teamName: "Technovert legends",
-        runsScored: 128,
-        wickets: 10,
-        oversPlayed: 11,
-        isFirstInning: false,
-        extras: {
-          wide: 0,
-          noBall: 1,
-          bye: 0,
-          legBye: 0,
-        },
-      },
-      tossWinner: "Technovert super kings",
-      matchWinner: "Technovert legends",
-      matchTime: "12:00:00",
-    },
-    {
-      id: "2",
-      teamOneInningStat: {
-        teamName: "Team daru",
-        runsScored: 200,
-        wickets: 0,
-        oversPlayed: 13,
-        isFirstInning: true,
-        extras: {
-          wide: 0,
-          noBall: 1,
-          bye: 0,
-          legBye: 0,
-        },
-      },
-      teamTwoInningStat: {
-        teamName: "Team technovert legends",
-        runsScored: 140,
-        wickets: 4,
-        oversPlayed: 14,
-        isFirstInning: false,
-        extras: {
-          wide: 0,
-          noBall: 1,
-          bye: 0,
-          legBye: 0,
-        },
-      },
-      tossWinner: "sss team",
-      matchWinner: "Team technovert legends",
-      matchTime: "12:00:00",
-    },
-    {
-      id: "3",
-      teamOneInningStat: {
-        teamName: "Team kings",
-        runsScored: 200,
-        wickets: 0,
-        oversPlayed: 13,
-        isFirstInning: true,
-        extras: {
-          wide: 0,
-          noBall: 1,
-          bye: 0,
-          legBye: 0,
-        },
-      },
-      teamTwoInningStat: {
-        teamName: "Team technovert legends",
-        runsScored: 140,
-        wickets: 4,
-        oversPlayed: 14,
-        isFirstInning: false,
-        extras: {
-          wide: 0,
-          noBall: 1,
-          bye: 0,
-          legBye: 0,
-        },
-      },
-      tossWinner: "Team kings",
-      matchWinner: "Team kings",
-      matchTime: "12:00:00",
-    },
-  ]);
-//🔴
+
+  const [liveMatches, setLiveMatches] = useState<ongoingMatchStats[]>([]);
+  const [finishedMatches, setFinishedMatches] = useState<finishedMatchStats[]>([]);
+
+  const handleClick = (e: any) => {
+    let matchId = e.target.getAttribute('data-bs-matchId');
+    setMatchId(matchId);
+    navigate('/app', { state: { matchId: matchId } })
+  };
+
+  React.useEffect(() => {
+    getMatches()
+      .then((res: any) => {
+        res.data.map((match: any) => {
+          if (match.matchWinner) {
+            let completedMatch: finishedMatchStats = {
+              matchId: match.matchId,
+              teamOne: match.teamOne,
+              teamTwo: match.teamTwo,
+              teamOneInningStat: {
+                runsScored: match.teamOneRuns,
+                wickets: match.teamOneWickets,
+                oversPlayed: match.teamOneOvers,
+              },
+              teamTwoInningStat: {
+                runsScored: match.teamTwoRuns,
+                wickets: match.teamTwoWickets,
+                oversPlayed: match.teamTwoOvers,
+              },
+              matchWinner: match.matchWinner,
+            };
+            setFinishedMatches((prev) => [...prev, completedMatch]);
+          }
+          else {
+            let liveMatch: ongoingMatchStats = {
+              matchId: match.matchId,
+              teamOne: match.teamOne,
+              teamTwo: match.teamTwo,
+              tossWinner: match.tossWinner,
+              tossDecision: match.tossDecision,
+              teamOneInningStat: {
+                runsScored: match.teamOneRuns,
+                wickets: match.teamOneWickets,
+                oversPlayed: match.teamOneOvers,
+              },
+              teamTwoInningStat: {
+                runsScored: match.teamTwoRuns,
+                wickets: match.teamTwoWickets,
+                oversPlayed: match.teamTwoOvers,
+              }
+            };
+            setLiveMatches((prev) => [...prev, liveMatch]);
+          }
+        })
+      })
+  }, [])
   return (
     <div className="container mt-4 ">
       <div className="row bg-light m-4 rounded p-2 border border-dark">
         <p className="fs-3 fw-bold  mb-0">LIVE <CiStreamOn className="fs-3 text-danger"></CiStreamOn></p>
         <div className="row  pb-3 d-flex">
-          {liveMatches.length=== 0 && <p className='col-4 fs-3 m-auto font-dark'>No current live matches.</p>}
+          {liveMatches.length === 0 && <p className='col-4 fs-3 m-auto font-dark'>No current live matches.</p>}
           {liveMatches.length !== 0 &&
             liveMatches.map((match, index) => {
               return (
-                <div className="col-lg-6">
+                <div className="col-lg-6" key={index}>
                   <Card className="border " >
                     <Card.Header className="d-flex">
-                    <Card.Title className="fw-bold text-nowrap fs-4">
+                      <Card.Title className="fw-bold text-nowrap fs-4">
                         {match.teamOne} VS {match.teamTwo}
                       </Card.Title>
                     </Card.Header>
                     <Card.Body className="text-capitalize">
-                      <Card.Text className="text-capitalize  fs-5">
-                        {match.tossWinner} won the toss and elected to {match.tossDecision} .
+                      <Card.Text className="text-capitalize " style={{fontSize:'1rem'}}>
+                        {match.tossWinner} won the toss and elected to {match.tossDecision} 
                       </Card.Text>
                       <Card.Title className="d-flex ">
-                        <p className="text-primary">{match.teamOne}</p> {(match.teamOneRuns===0)?<p className="ms-auto">(Yet to Bat)</p>:<p className="ms-auto">{match.teamOneRuns}/{match.teamOneWickets} ({match.teamOneOverPlayed} Overs)</p>} 
+                        <p className="text-primary">{match.teamOne}</p> {(match.teamOneInningStat.runsScored === 0) ? <p className="ms-auto">(Yet to Bat)</p> : <p className="ms-auto">{match.teamOneInningStat.runsScored}/{match.teamOneInningStat.wickets} ({match.teamOneInningStat.oversPlayed})</p>}
                       </Card.Title>
                       <Card.Title className="d-flex ">
-                        <p className="text-primary">{match.teamTwo}</p> {(match.teamTwoRuns===0)?<p className="ms-auto">(Yet to Bat)</p>:<p className="ms-auto">{match.teamTwoRuns}/{match.teamTwoWickets} ({match.teamTwoOverPlayed} Overs)</p>}
+                        <p className="text-primary">{match.teamTwo}</p> {(match.teamTwoInningStat.runsScored === 0) ? <p className="ms-auto">(Yet to Bat)</p> : <p className="ms-auto">{match.teamTwoInningStat.runsScored}/{match.teamTwoInningStat.wickets} ({match.teamTwoInningStat.oversPlayed})</p>}
                       </Card.Title>
                       <hr></hr>
                       <div className="d-flex ">
                         <button
+                          data-bs-matchId={match.matchId}
                           type="button"
                           className="btn btn-primary m-auto fw-bold fs-5"
+                          onClick={handleClick}
                         >
-                          Match Center
+                          Wactch Live
                         </button>
                       </div>
                     </Card.Body>
@@ -211,15 +115,15 @@ const MatchView = () => {
         </div>
       </div>
       <div className="row bg-light m-4 rounded p-2">
-        <p className=" fs-3 fw-bold mb-0">COMPLETED </p>
-        <div className="row row-cols-xl-3 row-cols-md-2 row-cols-sm-1 pb-3">
+        <p className=" fs-3 fw-bold mb-0" style={{textAlign:'center'}}>COMPLETED </p>
+        <div className="row row-cols-xl-3 row-cols-md-2 row-cols-sm-1 pb-3 d-flex m-auto">
           {finishedMatches.map((matchDetails, index) => {
             return (
-              <div className="col">
+              <div className="col mb-3">
                 <MatchStatus
                   teamName={[
-                    matchDetails.teamOneInningStat.teamName,
-                    matchDetails.teamTwoInningStat.teamName,
+                    matchDetails.teamOne,
+                    matchDetails.teamTwo,
                   ]}
                   teamOneDetails={[
                     matchDetails.teamOneInningStat.runsScored,
@@ -234,7 +138,7 @@ const MatchView = () => {
                   key={index}
                   index={index}
                   matchWinner={matchDetails.matchWinner}
-                ></MatchStatus>
+                />
               </div>
             );
           })}
