@@ -15,7 +15,7 @@ import { Team } from "../models/Team";
 import MatchReducer, { initialState } from "../contexts/MatchReducer";
 import { useNavigate } from "react-router-dom";
 import { Form } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 
 //action
 import TeamDetails from "../action/TeamDetails";
@@ -45,15 +45,16 @@ const MatchSettings = () => {
   const [teamOnePlaying11, setTeamOnePlaying11] = useState<any>([]);
   const [teamTwoPlaying11, setTeamTwoPlaying11] = useState<any>([]);
   const [matchDetails, setMatchDetails] = useState<any>({})
-
+  
   useEffect(() => {
-    if (teamOnePlaying11.length === 8 && firstTeamTitle && teamTwoPlaying11.length === 8 && secondTeamTitle) {
+    if (teamOnePlaying11.length === 8  && teamTwoPlaying11.length === 8) {
+      setMatchDetails({ ...matchDetails, teamOnePlayers: teamOnePlaying11, teamTwoPlayers: teamTwoPlaying11, teamOne: firstTeamTitle, teamTwo: secondTeamTitle, tossWinner: tossWinner, tossDecision: optedOption })  
       changeStartDisable(false)
     }
-    else {
+    else{
       changeStartDisable(true)
     }
-  }, [teamOnePlaying11, teamTwoPlaying11, firstTeamTitle, secondTeamTitle]);
+  }, [teamOnePlaying11.length, teamTwoPlaying11.length]);
 
   //to get and set up teams
   useEffect(() => {
@@ -69,7 +70,7 @@ const MatchSettings = () => {
     let arr: any[] = [...players]
     setTeamOnePlaying11(arr)
   }
-
+ 
   const setTeamTwoPlayers = (players: any) => {
     let arr: any[] = [...players]
     setTeamTwoPlaying11(arr)
@@ -100,7 +101,7 @@ const MatchSettings = () => {
       type: matchConstants.SET_TEAMTWO,
       payload: matchDetails,
     })
-    navigate('/app', { state: { matchId:matchDetails.matchInfo?.matchInfo.matchId } });
+     navigate('/app', { state: { matchId:matchDetails.matchInfo?.matchInfo.matchId } });
   };
 
   const handleBackButton = () => {
@@ -125,11 +126,11 @@ const MatchSettings = () => {
   };
 
 
-  useEffect(() => {
-    if (teamOnePlaying11.length === 8 && teamTwoPlaying11.length === 8) {
-      setMatchDetails({ ...matchDetails, teamOnePlayers: teamOnePlaying11, teamTwoPlayers: teamTwoPlaying11, teamOne: firstTeamTitle, teamTwo: secondTeamTitle, tossWinner: tossWinner, tossDecision: optedOption })
-    }
-  }, [teamOnePlaying11, teamTwoPlaying11, firstTeamTitle, secondTeamTitle, tossWinner, optedOption, matchDetails])
+  // useEffect(() => {
+  //   if (teamOnePlaying11.length === 8 && teamTwoPlaying11.length === 8) {
+  //     setMatchDetails({ ...matchDetails, teamOnePlayers: teamOnePlaying11, teamTwoPlayers: teamTwoPlaying11, teamOne: firstTeamTitle, teamTwo: secondTeamTitle, tossWinner: tossWinner, tossDecision: optedOption })
+  //   }
+  // }, [teamOnePlaying11, teamTwoPlaying11, firstTeamTitle, secondTeamTitle, tossWinner, optedOption, matchDetails])
 
 
   return (
@@ -269,7 +270,7 @@ const MatchSettings = () => {
                   <div className=" d-inline-flex ms-3 me-5">
                     <input
                       type="radio"
-                      value='bat'
+                      value='Batting'
                       id="teamOneTitle"
                       onChange={(e => { setOptedOption(e.target.value); if (firstTeamTitle.length !== 0 || secondTeamTitle.length !== 0) changeProceedDisable(false) })}
                       name="optedOption"

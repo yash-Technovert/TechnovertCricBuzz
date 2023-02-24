@@ -64,9 +64,7 @@ const PlayersInput = ({ teamId, setTeamPlayers }: PropsType) => {
   }, [removeId, handleRemove])
 
   useEffect(() => {
-    if (selectedPlayers.length === 8) {
       setTeamPlayers(selectedPlayers)
-    }
   }, [selectedPlayers.length])
   return (
     <>
